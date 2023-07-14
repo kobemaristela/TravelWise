@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% load static %} 
+{% block title %}TravelWise - Home{% endblock %} 
+
+{% load crispy_forms_tags %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/travel-header.css' %}" />
+{% endblock %} {% block content %}
+<section>
+  <div class="container">
+    <h2>Welcome {{user.username}}</h2>
+  </div>
+</section>
+{% endblock %}

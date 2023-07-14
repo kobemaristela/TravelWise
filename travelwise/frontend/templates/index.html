@@ -1,306 +1,253 @@
-{% load static %}
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
+{% extends 'base.html' %} {% load static %} 
+{% block title %}TravelWise{% endblock %} 
 
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
-      rel="stylesheet"
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/fontawesome.css' %}" />
+<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+<link rel="stylesheet" href="{% static 'css/owl.css' %}" />
+<link rel="stylesheet" href="{% static 'css/animate.css' %}" />
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.css"
+/>
+{% endblock %} {% block preloader %}
+<div id="js-preloader" class="js-preloader">
+  <div class="preloader-inner">
+    <span class="dot"></span>
+    <div class="dots">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+  </div>
+</div>
+{% endblock %} {% block banner %}
+<section id="section-1">
+  <div class="container">
+    {% if messages %} {% for message in messages %}
+    <div class="alert alert-{{message.tags}}">{{message}}</div>
+    {% endfor %} {% endif %}
+  </div>
+  <div class="content-slider">
+    <input
+      type="radio"
+      id="banner1"
+      class="sec-1-input"
+      name="banner"
+      checked
     />
-
-    <title>Travel Wise</title>
-
-    <!-- Bootstrap core CSS -->
-    <link
-      href="{% static 'bootstrap/css/bootstrap.min.css' %}"
-      rel="stylesheet"
-    />
-
-    <!-- Additional CSS Files -->
-    <link rel="stylesheet" href="{% static 'css/fontawesome.css' %}" />
-    <link
-      rel="stylesheet"
-      href="{% static 'css/templatemo-woox-travel.css' %}"
-    />
-    <link rel="stylesheet" href="{% static 'css/owl.css' %}" />
-    <link rel="stylesheet" href="{% static 'css/animate.css' %}" />
-    <link
-      rel="stylesheet"
-      href="https://unpkg.com/swiper@7/swiper-bundle.min.css"
-    />
-  </head>
-
-  <body>
-    <!-- ***** Preloader Start ***** -->
-    <div id="js-preloader" class="js-preloader">
-      <div class="preloader-inner">
-        <span class="dot"></span>
-        <div class="dots">
-          <span></span>
-          <span></span>
-          <span></span>
+    <input type="radio" id="banner2" class="sec-1-input" name="banner" />
+    <input type="radio" id="banner3" class="sec-1-input" name="banner" />
+    <input type="radio" id="banner4" class="sec-1-input" name="banner" />
+    <div class="slider">
+      <div id="top-banner-1" class="banner">
+        <div class="banner-inner-wrapper header-text">
+          <div class="main-caption">
+            <h2>Take a Glimpse Into The Beautiful Country Of:</h2>
+            <h1>Caribbean</h1>
+            <div class="border-button">
+              <a href="/register/">Create Account</a>
+            </div>
+          </div>
+          <!-- <div class="container">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="more-info">
+                    <div class="row">
+                      <div class="col-lg-3 col-sm-3 col-3">
+                        <i class="fa fa-user"></i>
+                        <h4><span>Population:</span><br />44.48 M</h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-globe"></i>
+                        <h4>
+                          <span>Territory:</span><br />275.400 KM<em>2</em>
+                        </h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-home"></i>
+                        <h4><span>AVG Price:</span><br />$946.000</h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <div class="main-button">
+                          <a href="about.html">Explore More</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+        </div>
+      </div>
+      <div id="top-banner-2" class="banner">
+        <div class="banner-inner-wrapper header-text">
+          <div class="main-caption">
+            <h2>Take a Glimpse Into The Beautiful Country Of:</h2>
+            <h1>Switzerland</h1>
+            <div class="border-button">
+              <a href="/register/">Create Account</a>
+            </div>
+          </div>
+          <!-- <div class="container">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="more-info">
+                    <div class="row">
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-user"></i>
+                        <h4><span>Population:</span><br />8.66 M</h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-globe"></i>
+                        <h4>
+                          <span>Territory:</span><br />41.290 KM<em>2</em>
+                        </h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-home"></i>
+                        <h4><span>AVG Price:</span><br />$1.100.200</h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <div class="main-button">
+                          <a href="about.html">Explore More</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+        </div>
+      </div>
+      <div id="top-banner-3" class="banner">
+        <div class="banner-inner-wrapper header-text">
+          <div class="main-caption">
+            <h2>Take a Glimpse Into The Beautiful Country Of:</h2>
+            <h1>France</h1>
+            <div class="border-button">
+              <a href="/register/">Create Account</a>
+            </div>
+          </div>
+          <!-- <div class="container">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="more-info">
+                    <div class="row">
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-user"></i>
+                        <h4><span>Population:</span><br />67.41 M</h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-globe"></i>
+                        <h4>
+                          <span>Territory:</span><br />551.500 KM<em>2</em>
+                        </h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-home"></i>
+                        <h4><span>AVG Price:</span><br />$425.600</h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <div class="main-button">
+                          <a href="about.html">Explore More</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+        </div>
+      </div>
+      <div id="top-banner-4" class="banner">
+        <div class="banner-inner-wrapper header-text">
+          <div class="main-caption">
+            <h2>Take a Glimpse Into The Beautiful Country Of:</h2>
+            <h1>Thailand</h1>
+            <div class="border-button">
+              <a href="/register/">Create Account</a>
+            </div>
+          </div>
+          <!-- <div class="container">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="more-info">
+                    <div class="row">
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-user"></i>
+                        <h4><span>Population:</span><br />69.86 M</h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-globe"></i>
+                        <h4>
+                          <span>Territory:</span><br />513.120 KM<em>2</em>
+                        </h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <i class="fa fa-home"></i>
+                        <h4><span>AVG Price:</span><br />$165.450</h4>
+                      </div>
+                      <div class="col-lg-3 col-sm-6 col-6">
+                        <div class="main-button">
+                          <a href="about.html">Explore More</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div> -->
         </div>
       </div>
     </div>
-    <!-- ***** Preloader End ***** -->
-
-    <!-- ***** Header Area Start ***** -->
-    <header class="header-area header-sticky">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <nav class="main-nav">
-              <!-- ***** Logo Start ***** -->
-              <a href="index.html" class="logo">
-                <img src="{% static 'images/logo.png' %}" alt="" />
-              </a>
-              <!-- ***** Logo End ***** -->
-              <!-- ***** Menu Start ***** -->
-              <ul class="nav">
-                <li><a href="index.html">Login</a></li>
-              </ul>
-              <a class="menu-trigger">
-                <span>Menu</span>
-              </a>
-              <!-- ***** Menu End ***** -->
-            </nav>
-          </div>
-        </div>
+    <nav>
+      <div class="controls">
+        <label for="banner1"
+          ><span class="progressbar"
+            ><span class="progressbar-fill"></span></span
+          ><span class="text">1</span></label
+        >
+        <label for="banner2"
+          ><span class="progressbar"
+            ><span class="progressbar-fill"></span></span
+          ><span class="text">2</span></label
+        >
+        <label for="banner3"
+          ><span class="progressbar"
+            ><span class="progressbar-fill"></span></span
+          ><span class="text">3</span></label
+        >
+        <label for="banner4"
+          ><span class="progressbar"
+            ><span class="progressbar-fill"></span></span
+          ><span class="text">4</span></label
+        >
       </div>
-    </header>
-    <!-- ***** Header Area End ***** -->
+    </nav>
+  </div>
+</section>
+{% endblock %} {% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@10/swiper-bundle.min.js"></script>
+<script src="{% static 'js/isotope.min.js' %}"></script>
+<script src="{% static 'js/owl-carousel.js' %}"></script>
+<script src="{% static 'js/tabs.js' %}"></script>
+<script src="{% static 'js/popup.js' %}"></script>
+<script src="{% static 'js/custom.js' %}"></script>
 
-    <!-- ***** Main Banner Area Start ***** -->
-    <section id="section-1">
-      <div class="content-slider">
-        <input
-          type="radio"
-          id="banner1"
-          class="sec-1-input"
-          name="banner"
-          checked
-        />
-        <input type="radio" id="banner2" class="sec-1-input" name="banner" />
-        <input type="radio" id="banner3" class="sec-1-input" name="banner" />
-        <input type="radio" id="banner4" class="sec-1-input" name="banner" />
-        <div class="slider">
-          <div id="top-banner-1" class="banner">
-            <div class="banner-inner-wrapper header-text">
-              <div class="main-caption">
-                <h2>Take a Glimpse Into The Beautiful Country Of:</h2>
-                <h1>Caribbean</h1>
-                <div class="border-button">
-                  <a href="about.html">Sign Up</a>
-                </div>
-              </div>
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="more-info">
-                      <div class="row">
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-user"></i>
-                          <h4><span>Population:</span><br />44.48 M</h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-globe"></i>
-                          <h4>
-                            <span>Territory:</span><br />275.400 KM<em>2</em>
-                          </h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-home"></i>
-                          <h4><span>AVG Price:</span><br />$946.000</h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <div class="main-button">
-                            <a href="about.html">Explore More</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="top-banner-2" class="banner">
-            <div class="banner-inner-wrapper header-text">
-              <div class="main-caption">
-                <h2>Take a Glimpse Into The Beautiful Country Of:</h2>
-                <h1>Switzerland</h1>
-                <div class="border-button">
-                  <a href="about.html">Go There</a>
-                </div>
-              </div>
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="more-info">
-                      <div class="row">
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-user"></i>
-                          <h4><span>Population:</span><br />8.66 M</h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-globe"></i>
-                          <h4>
-                            <span>Territory:</span><br />41.290 KM<em>2</em>
-                          </h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-home"></i>
-                          <h4><span>AVG Price:</span><br />$1.100.200</h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <div class="main-button">
-                            <a href="about.html">Explore More</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="top-banner-3" class="banner">
-            <div class="banner-inner-wrapper header-text">
-              <div class="main-caption">
-                <h2>Take a Glimpse Into The Beautiful Country Of:</h2>
-                <h1>France</h1>
-                <div class="border-button">
-                  <a href="about.html">Go There</a>
-                </div>
-              </div>
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="more-info">
-                      <div class="row">
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-user"></i>
-                          <h4><span>Population:</span><br />67.41 M</h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-globe"></i>
-                          <h4>
-                            <span>Territory:</span><br />551.500 KM<em>2</em>
-                          </h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-home"></i>
-                          <h4><span>AVG Price:</span><br />$425.600</h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <div class="main-button">
-                            <a href="about.html">Explore More</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div id="top-banner-4" class="banner">
-            <div class="banner-inner-wrapper header-text">
-              <div class="main-caption">
-                <h2>Take a Glimpse Into The Beautiful Country Of:</h2>
-                <h1>Thailand</h1>
-                <div class="border-button">
-                  <a href="about.html">Go There</a>
-                </div>
-              </div>
-              <div class="container">
-                <div class="row">
-                  <div class="col-lg-12">
-                    <div class="more-info">
-                      <div class="row">
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-user"></i>
-                          <h4><span>Population:</span><br />69.86 M</h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-globe"></i>
-                          <h4>
-                            <span>Territory:</span><br />513.120 KM<em>2</em>
-                          </h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <i class="fa fa-home"></i>
-                          <h4><span>AVG Price:</span><br />$165.450</h4>
-                        </div>
-                        <div class="col-lg-3 col-sm-6 col-6">
-                          <div class="main-button">
-                            <a href="about.html">Explore More</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <nav>
-          <div class="controls">
-            <label for="banner1"
-              ><span class="progressbar"
-                ><span class="progressbar-fill"></span></span
-              ><span class="text">1</span></label
-            >
-            <label for="banner2"
-              ><span class="progressbar"
-                ><span class="progressbar-fill"></span></span
-              ><span class="text">2</span></label
-            >
-            <label for="banner3"
-              ><span class="progressbar"
-                ><span class="progressbar-fill"></span></span
-              ><span class="text">3</span></label
-            >
-            <label for="banner4"
-              ><span class="progressbar"
-                ><span class="progressbar-fill"></span></span
-              ><span class="text">4</span></label
-            >
-          </div>
-        </nav>
-      </div>
-    </section>
-    <!-- ***** Main Banner Area End ***** -->
+<script>
+  function bannerSwitcher() {
+    next = $(".sec-1-input").filter(":checked").next(".sec-1-input");
+    if (next.length) next.prop("checked", true);
+    else $(".sec-1-input").first().prop("checked", true);
+  }
 
-    <!-- Scripts -->
-    <!-- Bootstrap core JavaScript -->
-    <script src="{% static 'jquery/jquery.min.js' %}"></script>
-    <script src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+  var bannerTimer = setInterval(bannerSwitcher, 5000);
 
-    <script src="{% static 'js/isotope.min.js' %}"></script>
-    <script src="{% static 'js/owl-carousel.js' %}"></script>
-    <script src="{% static 'js/tabs.js' %}"></script>
-    <script src="{% static 'js/popup.js' %}"></script>
-    <script src="{% static 'js/custom.js' %}"></script>
+  $("nav .controls label").click(function () {
+    clearInterval(bannerTimer);
+    bannerTimer = setInterval(bannerSwitcher, 5000);
+  });
+</script>
 
-    <script>
-      function bannerSwitcher() {
-        next = $(".sec-1-input").filter(":checked").next(".sec-1-input");
-        if (next.length) next.prop("checked", true);
-        else $(".sec-1-input").first().prop("checked", true);
-      }
-
-      var bannerTimer = setInterval(bannerSwitcher, 5000);
-
-      $("nav .controls label").click(function () {
-        clearInterval(bannerTimer);
-        bannerTimer = setInterval(bannerSwitcher, 5000);
-      });
-    </script>
-  </body>
-</html>
+{% endblock %}
