@@ -13,7 +13,10 @@ openai.api_key = OPENAI_KEY
 
 def chat(request):
     if request.method != 'POST':
-        return JsonResponse({'error': 'Invalid Method'}, status=HTTPStatus.METHOD_NOT_ALLOWED)
+        return JsonResponse({ 'error': 'Invalid Method' }, status=HTTPStatus.METHOD_NOT_ALLOWED)
+        
+    if not request.user.is_authenticated:
+        return JsonResponse({ 'error': 'Unauthorized' }, status=HTTPStatus.UNAUTHORIZED)
       
     request_body = None
     try:
