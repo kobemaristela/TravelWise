@@ -15,7 +15,7 @@
     
     window.api = {};
     
-    window.api.chat = function() {
+    window.api.chat = function(message) {
         let csrftoken = getCookie('csrftoken');
         
         if(csrftoken === null) {
@@ -26,7 +26,11 @@
             method: 'POST',
             headers: {
                 'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json; charset=utf-8',
             },
+            body: JSON.stringify({
+                'message': message,
+            }),
         }).then(function (response) {
             return response.json();
         });
