@@ -16,7 +16,7 @@ def chat(request):
         return JsonResponse({'error': 'Invalid Method'}, status=HTTPStatus.METHOD_NOT_ALLOWED)
      
     # Prevent OpenAI API calls when testing
-    return JsonResponse({ 'message': 'Test Response' })
+    # return JsonResponse({ 'message': 'Test Response' })
     
     chat_completion = openai.ChatCompletion.create(
         model=OPENAI_MODEL, 
