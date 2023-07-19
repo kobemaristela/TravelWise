@@ -52,5 +52,4 @@ def chat(request):
     )
     
     # StreamingHttpResponse(event_stream(), content_type='text/event-stream')
-    
     return JsonResponse({ 'message': chat_completion.choices[0].message.content })
