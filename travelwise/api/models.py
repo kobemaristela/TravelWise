@@ -20,11 +20,11 @@ class Activities(models.Model):
     end_time = models.DateTimeField()
     link = models.TextField()
     note = models.TextField()
-    activity = models.ForeignKey(TravelPlans, on_delete=models.CASCADE)
+    plan = models.ForeignKey(TravelPlans, on_delete=models.CASCADE)
 
 
 class Chat(models.Model):
     time = models.TimeField()
     user = models.TextField()
     msg = models.IntegerField()
-    activity = models.ForeignKey(TravelPlans, on_delete=models.CASCADE)
+    plan = models.ForeignKey(TravelPlans, on_delete=models.CASCADE)
