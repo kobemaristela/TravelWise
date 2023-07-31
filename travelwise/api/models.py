@@ -26,5 +26,5 @@ class Activities(models.Model):
 class Chat(models.Model):
     time = models.TimeField()
     user = models.TextField()
-    msg = models.IntegerField()
+    msg = models.TextField()
     plan = models.ForeignKey(TravelPlans, on_delete=models.CASCADE)

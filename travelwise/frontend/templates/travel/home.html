@@ -7,35 +7,6 @@
 <section>
   <div class="container">
     <h2>Welcome {{user.username}}</h2>
-    
-    <input type="text" id="chat-input"></input>
-    <div id="chat-messages">
-    </div>
   </div>
 </section>
-
-<script>
-    let chatInput = document.getElementById('chat-input');
-    let chatMessages = document.getElementById('chat-messages');
-    
-    chatInput.addEventListener('keydown', function(event) {
-        if(event.keyCode !== 13) {
-            return;
-        }
-        
-        api
-            .chat(chatInput.value)
-            .then(function(response) {
-                let message = response['message'];
-                
-                let messageDiv = document.createElement('div');
-                messageDiv.innerText = message;
-                
-                chatMessages.appendChild(messageDiv);
-            })
-            .catch(function(error) {
-                alert(error);
-            });
-    });
-</script>
 {% endblock %}

@@ -5,7 +5,7 @@ from http import HTTPStatus
 import os
 import openai
 import json
-from .models import Activities, TravelPlans
+from .models import Activities, TravelPlans, Chat
 import datetime
 
 OPENAI_KEY = os.environ['OPENAI_KEY']
@@ -71,8 +71,7 @@ def chat(request):
     
     if travel_plan is None or travel_plan.author != request.user:
         return JsonResponse({ 'error': 'Missing travel plan' }, status=HTTPStatus.NOT_FOUND)
-        
-     
+          
     # Prevent OpenAI API calls when testing
     # return JsonResponse({ 'message': 'Test Response' })
     
@@ -86,18 +85,25 @@ def chat(request):
             note=note,
             plan=travel_plan,
         )
-    
-    
+        
     messages = [
         { 
             'role': 'system', 
             'content': 'You are an assistant for organizing travel plans.',
-        },
-        {
-            'role': 'user',
-            'content': message,
-        },
+        }
     ]
+    
+    for stored_message in Chat.objects.filter(plan=travel_plan).order_by('time'):
+        messages.append({
+            'role': stored_message.user,
+            'content': stored_message.msg,
+        })
+    
+    messages.append({
+        'role': 'user',
+        'content': message,
+    })
+        
     chat_completion = openai.ChatCompletion.create(
         model=OPENAI_MODEL, 
         messages=messages,
@@ -137,6 +143,9 @@ def chat(request):
             function_call="auto",
         )
         response_message = chat_completion.choices[0].message
+        
+    Chat(time=datetime.datetime.now(), user='user', msg=message, plan=travel_plan).save()
+    Chat(time=datetime.datetime.now(), user='assistant', msg=response_message.content, plan=travel_plan).save()
     
     # StreamingHttpResponse(event_stream(), content_type='text/event-stream')
     return JsonResponse({ 'message': response_message.content })
