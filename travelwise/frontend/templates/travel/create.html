@@ -1,0 +1,49 @@
+{% extends 'base.html' %} {% load static %} 
+{% block title %}TravelWise - Create Plan{% endblock %} 
+
+{% load crispy_forms_tags %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/travel-header.css' %}" />
+{% endblock %} {% block content %}
+
+<section>
+  <div class="container">
+    <input type="text" id="chat-input"></input>
+    <div id="chat-messages">
+        <div>Hello, I am your travel planning assistant. Where would you like to travel?</div>
+    </div>
+  </div>
+</section>
+
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    
+    let chatInput = document.getElementById('chat-input');
+    let chatMessages = document.getElementById('chat-messages');
+    
+    chatInput.addEventListener('keydown', function(event) {
+        if(event.keyCode !== 13) {
+            return;
+        }
+        
+        api
+            .chat(chatInput.value)
+            .then(function(response) {
+                let message = response['message'];
+                
+                let messageDiv = document.createElement('div');
+                messageDiv.innerText = message;
+                
+                chatMessages.appendChild(messageDiv);
+            })
+            .catch(function(error) {
+                alert(error);
+            });
+    });
+</script>
+<style>
+    #chat-input {
+        width: 100%;
+    }
+</style>
+{% endblock %}

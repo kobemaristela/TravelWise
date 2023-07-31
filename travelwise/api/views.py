@@ -52,17 +52,26 @@ def chat(request):
     try:
         request_body = request.body.decode('utf-8')
     except:
-        return JsonResponse({ 'error': 'Response body is not UTF-8' }, status=HTTPStatus.BAD_REQUEST)
+        return JsonResponse({ 'error': 'Request body is not UTF-8' }, status=HTTPStatus.BAD_REQUEST)
      
     request_json = None
     try:  
         request_json = json.loads(request_body)
     except:
-        return JsonResponse({ 'error': 'Response body is not JSON' }, status=HTTPStatus.BAD_REQUEST)
+        return JsonResponse({ 'error': 'Request body is not JSON' }, status=HTTPStatus.BAD_REQUEST)
         
     message = request_json.get('message')
     if message is None:
         return JsonResponse({ 'error': 'Missing "message" field' }, status=HTTPStatus.BAD_REQUEST)
+    plan_id = request_json.get('planId')
+    if message is None:
+        return JsonResponse({ 'error': 'Missing "planId" field' }, status=HTTPStatus.BAD_REQUEST)
+        
+    travel_plan = TravelPlans.objects.filter(pk=1).first()
+    
+    if travel_plan is None or travel_plan.author != request.user:
+        return JsonResponse({ 'error': 'Missing travel plan' }, status=HTTPStatus.NOT_FOUND)
+        
      
     # Prevent OpenAI API calls when testing
     # return JsonResponse({ 'message': 'Test Response' })
@@ -75,7 +84,7 @@ def chat(request):
             start_time=start_time,
             end_time=end_time,
             note=note,
-            plan=TravelPlans.objects.get(pk=1),
+            plan=travel_plan,
         )
     
     

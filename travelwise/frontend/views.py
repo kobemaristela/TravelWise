@@ -58,3 +58,8 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("landing")
+    
+    
+@login_required(login_url="landing")
+def create_plan(request):
+    return render(request, 'travel/create.html')
