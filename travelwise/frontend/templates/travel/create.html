@@ -9,7 +9,7 @@
   <div class="container">
     <input type="text" id="chat-input"></input>
     <div id="chat-messages">
-        <div>Hello, I am your travel planning assistant. Where would you like to travel?</div>
+        <div>assistant: Hello, I am your travel planning assistant. Where would you like to travel?</div>
         {% for message in messages %}
             <div>{{message.role}}: {{message.content}}</div>
         {% endfor %}
@@ -32,10 +32,14 @@
         api
             .chat(id, chatInput.value)
             .then(function(response) {
+                let userMessageDiv = document.createElement('div');
+                userMessageDiv.innerText = `user: ${chatInput.value}`;
+                chatMessages.appendChild(userMessageDiv);
+                
                 let message = response['message'];
                 
                 let messageDiv = document.createElement('div');
-                messageDiv.innerText = message;
+                messageDiv.innerText = `assistant: ${message}`;
                 
                 chatMessages.appendChild(messageDiv);
             })
