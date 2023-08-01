@@ -67,9 +67,9 @@ def chat(request):
     if message is None:
         return JsonResponse({ 'error': 'Missing "planId" field' }, status=HTTPStatus.BAD_REQUEST)
         
-    travel_plan = TravelPlans.objects.filter(pk=1).first()
+    travel_plan = TravelPlans.objects.filter(pk=plan_id, author=request.user).first()
     
-    if travel_plan is None or travel_plan.author != request.user:
+    if travel_plan is None:
         return JsonResponse({ 'error': 'Missing travel plan' }, status=HTTPStatus.NOT_FOUND)
           
     # Prevent OpenAI API calls when testing

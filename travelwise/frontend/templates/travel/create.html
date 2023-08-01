@@ -10,6 +10,9 @@
     <input type="text" id="chat-input"></input>
     <div id="chat-messages">
         <div>Hello, I am your travel planning assistant. Where would you like to travel?</div>
+        {% for message in messages %}
+            <div>{{message.role}}: {{message.content}}</div>
+        {% endfor %}
     </div>
   </div>
 </section>
@@ -27,7 +30,7 @@
         }
         
         api
-            .chat(chatInput.value)
+            .chat(id, chatInput.value)
             .then(function(response) {
                 let message = response['message'];
                 

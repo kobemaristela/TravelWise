@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.apps import apps
+
+TravelPlans = apps.get_model('api', 'TravelPlans')
+Chat = apps.get_model('api', 'Chat')
 
 # Create your views here.
 
@@ -62,4 +66,20 @@ def logout_view(request):
     
 @login_required(login_url="landing")
 def create_plan(request):
-    return render(request, 'travel/create.html')
+    travel_plan_id = request.GET.get('id')
+    if travel_plan_id is None:
+        return redirect('home')
+        
+    messages = []
+        
+    travel_plan = TravelPlans.objects.filter(pk=travel_plan_id, author=request.user).first()
+    if travel_plan is not None:
+        for stored_message in Chat.objects.filter(plan=travel_plan).order_by('time'):
+            messages.append({
+                'role': stored_message.user,
+                'content': stored_message.msg,
+            })
+    
+    return render(request, 'travel/create.html', {
+        'messages': messages,
+    })
