@@ -7,6 +7,20 @@
 <section>
   <div class="container">
     <h2>Welcome {{user.username}}</h2>
+    <button id="new-plan-button">New Plan</button>
   </div>
+  <script>
+    document.getElementById('new-plan-button').addEventListener('click', function(event) {
+        api.createPlan()
+        .then(function(response) {
+            const planId = response.planId;
+            
+            window.location.href = `/create/?id=${planId}`;
+        })
+        .catch(function (error) {
+            alert('Failed to create plan');
+        });
+    });
+  </script>
 </section>
 {% endblock %}

@@ -149,3 +149,15 @@ def chat(request):
     
     # StreamingHttpResponse(event_stream(), content_type='text/event-stream')
     return JsonResponse({ 'message': response_message.content })
+
+def plan(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({ 'error': 'Unauthorized' }, status=HTTPStatus.UNAUTHORIZED)
+        
+    if request.method != 'POST':
+        return JsonResponse({ 'error': 'Invalid Method' }, status=HTTPStatus.METHOD_NOT_ALLOWED)
+        
+    new_travel_plan = TravelPlans(name='WIP', author=request.user, note='WIP')
+    new_travel_plan.save()
+    
+    return JsonResponse({ 'planId': new_travel_plan.pk })

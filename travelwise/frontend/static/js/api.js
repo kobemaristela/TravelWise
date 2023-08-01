@@ -36,4 +36,23 @@
             return response.json();
         });
     };
+    
+    window.api.createPlan = function() {
+        const csrftoken = getCookie('csrftoken');
+        
+        if(csrftoken === null) {
+            throw new Error('Missing cookies with name "csrftoken"');
+        }
+        
+        return fetch('/api/plan/', {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': csrftoken,
+                'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: JSON.stringify({}),
+        }).then(function (response) {
+            return response.json();
+        });
+    };
 })();
