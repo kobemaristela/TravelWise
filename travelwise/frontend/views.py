@@ -70,12 +70,12 @@ def create_plan(request):
     if travel_plan_id is None:
         return redirect('home')
         
-    travel_plan = TravelPlans.objects.filter(pk=travel_plan_id, author=request.user).first()
+    travel_plan = TravelPlan.objects.filter(pk=travel_plan_id, author=request.user).first()
     if travel_plan is None:
         return redirect('home')
         
     messages = []
-    for stored_message in Chat.objects.filter(plan=travel_plan).order_by('time'):
+    for stored_message in ChatMessage.objects.filter(plan=travel_plan).order_by('time'):
         messages.append({
             'role': stored_message.user,
             'content': stored_message.msg,

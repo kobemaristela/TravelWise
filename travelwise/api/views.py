@@ -67,7 +67,7 @@ def chat(request):
     if message is None:
         return JsonResponse({ 'error': 'Missing "planId" field' }, status=HTTPStatus.BAD_REQUEST)
         
-    travel_plan = TravelPlans.objects.filter(pk=plan_id, author=request.user).first()
+    travel_plan = TravelPlan.objects.filter(pk=plan_id, author=request.user).first()
     
     if travel_plan is None:
         return JsonResponse({ 'error': 'Missing travel plan' }, status=HTTPStatus.NOT_FOUND)
@@ -79,7 +79,7 @@ def chat(request):
         start_time = datetime.datetime.fromisoformat(start_time)
         end_time = datetime.datetime.fromisoformat(end_time)
         
-        Activities.objects.create(
+        Activity.objects.create(
             start_time=start_time,
             end_time=end_time,
             note=note,
@@ -93,7 +93,7 @@ def chat(request):
         }
     ]
     
-    for stored_message in Chat.objects.filter(plan=travel_plan).order_by('time'):
+    for stored_message in ChatMessage.objects.filter(plan=travel_plan).order_by('time'):
         messages.append({
             'role': stored_message.user,
             'content': stored_message.msg,
@@ -144,8 +144,8 @@ def chat(request):
         )
         response_message = chat_completion.choices[0].message
         
-    Chat(time=datetime.datetime.now(), user='user', msg=message, plan=travel_plan).save()
-    Chat(time=datetime.datetime.now(), user='assistant', msg=response_message.content, plan=travel_plan).save()
+    ChatMessage(time=datetime.datetime.now(), user='user', msg=message, plan=travel_plan).save()
+    ChatMessage(time=datetime.datetime.now(), user='assistant', msg=response_message.content, plan=travel_plan).save()
     
     # StreamingHttpResponse(event_stream(), content_type='text/event-stream')
     return JsonResponse({ 'message': response_message.content })
@@ -157,7 +157,7 @@ def plan(request):
     if request.method != 'POST':
         return JsonResponse({ 'error': 'Invalid Method' }, status=HTTPStatus.METHOD_NOT_ALLOWED)
         
-    new_travel_plan = TravelPlans(name='WIP', author=request.user, note='WIP')
+    new_travel_plan = TravelPlan(name='WIP', author=request.user, note='WIP')
     new_travel_plan.save()
     
     return JsonResponse({ 'planId': new_travel_plan.pk })
