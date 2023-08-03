@@ -21,13 +21,15 @@
     </div>
   </div>
 </div>
-{% endblock %} {% block banner %}
+{% endblock %} 
+
+{% block unauth_menu %}
+<li><a href="{% url 'login' %}">Login</a></li>
+{% endblock %} 
+
+
+{% block banner %}
 <section id="section-1">
-  <div class="container">
-    {% if messages %} {% for message in messages %}
-    <div class="alert alert-{{message.tags}}">{{message}}</div>
-    {% endfor %} {% endif %}
-  </div>
   <div class="content-slider">
     <input
       type="radio"

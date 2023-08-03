@@ -2,14 +2,51 @@
 {% block title %}TravelWise - Login{% endblock %} 
 
 {% load crispy_forms_tags %} {% block css %}
+<link rel="stylesheet" href="{% static 'fonts/material-icon/css/material-design-iconic-font.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/login.css' %}" />
 <link rel="stylesheet" href="{% static 'css/travel-header.css' %}" />
-{% endblock %} {% block content %}
-<section>
-  <div class="container">
-    <form method="POST">
-      {% csrf_token %}{{form|crispy}}
-      <button type="submit" class="btn btn-success">Login</button>
-    </form>
-  </div>
+{% endblock %} 
+
+{% block unauth_menu %}
+<li><a href="{% url 'register' %}">Register</a></li>
+{% endblock %} 
+
+
+{% block content %}
+<section class="sign-in">
+    <div class="container">
+        <div class="signin-content">
+            <div class="signin-image">
+                <figure><img src="{% static 'images/test3.jpg' %}" alt="sign up image"></figure>
+            </div>
+
+            <div class="signin-form">
+                <h2 class="form-title">Sign In</h2>
+                <form method="POST" class="register-form" id="login-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <input type="text" name="username" id="username" placeholder="Username"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
+                        <input type="password" name="password" id="password" placeholder="Password"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                        <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                    </div>
+                    <div class="form-group form-button">
+                        <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {% endblock %}

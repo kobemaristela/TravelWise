@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import StreamingHttpResponse
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 from http import HTTPStatus
 import os
 import openai
@@ -54,3 +55,11 @@ def chat(request):
     # StreamingHttpResponse(event_stream(), content_type='text/event-stream')
     
     return JsonResponse({ 'message': chat_completion.choices[0].message.content })
+
+
+def validateUser(request, username=None):
+    if request.method == 'GET':
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({"message": "bad"})
+        
+        return JsonResponse({"message": "good"})
