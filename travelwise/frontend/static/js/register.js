@@ -16,20 +16,26 @@ addEventListener("DOMContentLoaded", (event) => {
     /(?:[a-z0-9+!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|"(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21\x23-\x5b\x5d-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])*")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\x01-\x08\x0b\x0c\x0e-\x1f\x21-\x5a\x53-\x7f]|\\[\x01-\x09\x0b\x0c\x0e-\x7f])+)\])/i;
 
   // Username Validation
-  password.addEventListener("blur", async () => {
-    const response = await fetch('/api/validateUser/' + username.value + '/');
-    const ret = await response.json();
+  username.addEventListener("blur", async () => {
+    if (username.value == "") {
+      username.classList.remove("is-invalid");
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/validateUser/' + username.value + '/');
+      var json = await response.json();
+    } catch (error) {
+      log.console(error.message);
+      return;
+    }
     
-    if (ret.message == "good") {
+    if (json.message == "good") {
       username.classList.remove("is-invalid");
       username.classList.add("is-valid");
     } else {
       username.classList.add("is-invalid");
       username.classList.remove("is-valid");
-    }
-
-    if (username.value == "") {
-      username.classList.remove("is-invalid");
     }
 
   });
