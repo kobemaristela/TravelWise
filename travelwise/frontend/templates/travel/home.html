@@ -7,35 +7,20 @@
 <section>
   <div class="container">
     <h2>Welcome {{user.username}}</h2>
-    
-    <input type="text" id="chat-input"></input>
-    <div id="chat-messages">
-    </div>
+    <button id="new-plan-button">New Plan</button>
   </div>
-</section>
-
-<script>
-    let chatInput = document.getElementById('chat-input');
-    let chatMessages = document.getElementById('chat-messages');
-    
-    chatInput.addEventListener('keydown', function(event) {
-        if(event.keyCode !== 13) {
-            return;
-        }
-        
-        api
-            .chat(chatInput.value)
-            .then(function(response) {
-                let message = response['message'];
-                
-                let messageDiv = document.createElement('div');
-                messageDiv.innerText = message;
-                
-                chatMessages.appendChild(messageDiv);
-            })
-            .catch(function(error) {
-                alert(error);
-            });
+  <script>
+    document.getElementById('new-plan-button').addEventListener('click', function(event) {
+        api.createPlan()
+        .then(function(response) {
+            const planId = response.planId;
+            
+            window.location.href = `/create/?id=${planId}`;
+        })
+        .catch(function (error) {
+            alert('Failed to create plan');
+        });
     });
-</script>
+  </script>
+</section>
 {% endblock %}

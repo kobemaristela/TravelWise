@@ -3,8 +3,10 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from .forms import RegisterForm
+from django.apps import apps
 
-# Create your views here.
+TravelPlan = apps.get_model('api', 'TravelPlan')
+ChatMessage = apps.get_model('api', 'ChatMessage')
 
 def landing(request):
     return render(request, "index.html")
@@ -59,3 +61,25 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect("landing")
+    
+    
+@login_required(login_url="landing")
+def create_plan(request):
+    travel_plan_id = request.GET.get('id')
+    if travel_plan_id is None:
+        return redirect('home')
+        
+    travel_plan = TravelPlan.objects.filter(pk=travel_plan_id, author=request.user).first()
+    if travel_plan is None:
+        return redirect('home')
+        
+    messages = []
+    for stored_message in ChatMessage.objects.filter(plan=travel_plan).order_by('time'):
+        messages.append({
+            'role': stored_message.user,
+            'content': stored_message.msg,
+        })
+        
+    return render(request, 'travel/create.html', {
+        'messages': messages,
+    })

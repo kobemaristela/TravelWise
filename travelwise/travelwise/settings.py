@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     
     # Applications
     "frontend.apps.FrontendConfig",
+    "api.apps.ApiConfig"
 ]
 
 # Bootstrap Crispy Form Template
