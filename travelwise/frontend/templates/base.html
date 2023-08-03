@@ -34,7 +34,6 @@
 
     <!-- ***** Header Area Start ***** -->
     <header class="header-area header-sticky">
-      <div class="container">
         <div class="row">
           <div class="col-12">
             <nav class="main-nav">
@@ -49,7 +48,7 @@
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
-                <li><a href="{% url 'login' %}">Login</a></li>
+                {% block unauth_menu %}{% endblock %}
                 {% endif %}
               </ul>
               <a class="menu-trigger">
@@ -59,7 +58,6 @@
             </nav>
           </div>
         </div>
-      </div>
     </header>
     <!-- ***** Header Area End ***** -->
 

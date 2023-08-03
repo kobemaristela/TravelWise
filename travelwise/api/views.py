@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import StreamingHttpResponse
 from django.http import JsonResponse
+from django.contrib.auth.models import User
 from http import HTTPStatus
 import os
 import openai
@@ -161,3 +162,12 @@ def plan(request):
     new_travel_plan.save()
     
     return JsonResponse({ 'planId': new_travel_plan.pk })
+
+
+def validateUser(request, username=None):
+    if request.method == 'GET':
+        if User.objects.filter(username=username).exists():
+            return JsonResponse({"message": "bad"})
+        
+        return JsonResponse({"message": "good"})
+

@@ -1,15 +1,117 @@
-{% extends 'base.html' %} {% load static %} 
-{% block title %}TravelWise - SignUp{% endblock %} 
-
-{% load crispy_forms_tags %} {% block css %}
+{% extends 'base.html' %} {% load static %} {% block title %}TravelWise -
+SignUp{% endblock %} {% load crispy_forms_tags %} {% block css %}
+<link
+  rel="stylesheet"
+  href="{% static 'fonts/material-icon/css/material-design-iconic-font.min.css' %}"
+/>
+<link rel="stylesheet" href="{% static 'css/login.css' %}" />
 <link rel="stylesheet" href="{% static 'css/travel-header.css' %}" />
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+/>
+{% endblock %} {% block unauth_menu %}
+<li><a href="{% url 'login' %}">Login</a></li>
 {% endblock %} {% block content %}
-<section>
+<section class="signup">
   <div class="container">
-    <form method="POST">
-      {% csrf_token %}{{form|crispy}}
-      <button type="submit" class="btn btn-success">Register</button>
-    </form>
+    <div class="signup-content">
+      <div class="signup-form">
+        <h2 class="form-title">Sign up</h2>
+        <form method="POST" class="register-form" id="register-form">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="username"
+              ><i class="zmdi zmdi-account material-icons-name"></i
+            ></label>
+            <input type="text" name="username" id="username" placeholder="Username" />
+            <div class="valid-feedback">Username is available</div>
+            <div class="invalid-feedback">Username already taken</div>
+          </div>
+          <div class="form-group">
+            <label for="email"><i class="zmdi zmdi-email"></i></label>
+            <input type="email" name="email" id="email" placeholder="Email" />
+            <div class="invalid-feedback">Invalid email address</div>
+          </div>
+          <div class="form-group">
+            <label for="password1"><i class="zmdi zmdi-lock"></i></label>
+            <input
+              type="password"
+              name="password1"
+              id="password"
+              placeholder="Password"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password2"><i class="zmdi zmdi-lock-outline"></i></label>
+            <input
+              type="password"
+              name="password2"
+              id="confirm-password"
+              placeholder="Confirm password"
+            />
+            <div class="invalid-feedback">Passwords do not match</div>
+          </div>
+          <div class="form-group form-button">
+            <input
+              type="submit"
+              name="signup"
+              id="signup"
+              class="form-submit"
+              value="Register"
+            />
+          </div>
+        </form>
+      </div>
+      <div class="signup-image" id="signup-image">
+          <img
+            src="{% static 'images/deals-01.jpg' %}"
+          />
+      </div>
+
+      <div class="col-6 mt-4 mt-xxl-0 w-auto h-auto">
+        <div
+          class="alert px-4 py-3 mb-0 d-none"
+          role="alert"
+          data-mdb-color="warning"
+          id="password-alert"
+        >
+          <ul class="list-unstyled mb-0">
+            <li class="requirements length">
+              <i class="fas fa-check text-success me-2"></i>
+              <i class="fas fa-times text-danger me-3"></i>
+              Your password must have at least 8 characters
+            </li>
+            <li class="requirements uppercase">
+              <i class="fas fa-check text-success me-2"></i>
+              <i class="fas fa-times text-danger me-3"></i>
+              Your password must have at least 1 uppercase character
+            </li>
+            <li class="requirements number">
+              <i class="fas fa-check text-success me-2"></i>
+              <i class="fas fa-times text-danger me-3"></i>
+              Your password must have at least 1 number
+            </li>
+            <li class="requirements special-char">
+              <i class="fas fa-check text-success me-2"></i>
+              <i class="fas fa-times text-danger me-3"></i>
+              Your password must have at least 1 special character
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </section>
+{% endblock %} {% block scripts %}
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
+  integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script src="{% static 'js/register.js' %}"></script>
 {% endblock %}
