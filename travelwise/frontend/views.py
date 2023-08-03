@@ -4,8 +4,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
 
-TravelPlans = apps.get_model('api', 'TravelPlans')
-Chat = apps.get_model('api', 'Chat')
+TravelPlan = apps.get_model('api', 'TravelPlan')
+ChatMessage = apps.get_model('api', 'ChatMessage')
 
 # Create your views here.
 

@@ -5,7 +5,7 @@ from http import HTTPStatus
 import os
 import openai
 import json
-from .models import Activities, TravelPlans, Chat
+from .models import Activity, TravelPlan, ChatMessage
 import datetime
 
 OPENAI_KEY = os.environ['OPENAI_KEY']
