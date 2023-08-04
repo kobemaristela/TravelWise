@@ -26,7 +26,7 @@ addEventListener("DOMContentLoaded", (event) => {
       const response = await fetch('/api/validateUser/' + username.value + '/');
       var json = await response.json();
     } catch (error) {
-      log.console(error.message);
+      console.log(error.message);
       return;
     }
     
