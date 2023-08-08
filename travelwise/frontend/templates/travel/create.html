@@ -6,13 +6,16 @@
 {% endblock %} {% block content %}
 
 <section>
-  <div class="container">
-    <input type="text" id="chat-input"></input>
-    <div id="chat-messages">
-        <div>assistant: Hello, I am your travel planning assistant. Where would you like to travel?</div>
+  <div class="container d-flex flex-column flex-grow-1">
+    <div id="chat-messages" class="flex-grow-1 d-flex flex-column">
+        <div class="assistant">Hello, I am your travel planning assistant. Where would you like to travel?</div>
+        
         {% for message in messages %}
-            <div>{{message.role}}: {{message.content}}</div>
+            <div class="{{message.role}}">{{message.content}}</div>
         {% endfor %}
+    </div>
+    <div class="m-4">
+        <input type="text" class="form-control" id="chat-input" placeholder="Enter chat message">
     </div>
   </div>
 </section>
@@ -33,13 +36,15 @@
             .chat(id, chatInput.value)
             .then(function(response) {
                 let userMessageDiv = document.createElement('div');
-                userMessageDiv.innerText = `user: ${chatInput.value}`;
+                userMessageDiv.classList.add('user');
+                userMessageDiv.innerText = `${chatInput.value}`;
                 chatMessages.appendChild(userMessageDiv);
                 
                 let message = response['message'];
                 
                 let messageDiv = document.createElement('div');
-                messageDiv.innerText = `assistant: ${message}`;
+                messageDiv.classList.add('assistant');
+                messageDiv.innerText = `${message}`;
                 
                 chatMessages.appendChild(messageDiv);
             })
@@ -51,6 +56,70 @@
 <style>
     #chat-input {
         width: 100%;
+    }
+    
+    /* TODO: Consider making the following global */    
+    body {
+        height: 100%;
+        
+        /* TODO: We should use a bootsrap class for these instead, but this is a quick, localized hack. */
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    
+    /* TODO: Use a selector that is actually sane */
+    body > section {
+        flex-grow: 1;
+        display: flex;
+        
+        /* I hate bootstrap. Fix later. */
+        overflow-x: hidden;
+    }
+    
+    /* TODO: Consider making the following global */
+    html {
+        height: 100%;
+    }
+    
+    /* TODO: Fix this hack */
+    .row {
+        max-width: 100vw;
+    }
+    
+    /* I feel like I've gone full circle here. Why even Boostrap? */
+    .user,
+    .assistant {
+        display: inline;
+        margin: 1em;
+        padding: 1em;
+        color: white;
+        border-radius: 1em;
+        max-width: 75%;
+    }
+    
+    .assistant {
+        background-color: #c13022;
+    }
+    
+    .user {
+        background-color: #22b3c1;
+        
+        margin-left: 25%;
+    }
+    
+    /* One of the changes I made above negates the section margin, and the header does not play well with flex. Joy. */
+    .container {
+        /*
+        JK, only breaks on mobile. Great.
+        
+        margin-top: 330px;
+        
+        */
+    }
+    
+    #chat-messages {
+        overflow: auto;
     }
 </style>
 {% endblock %}
