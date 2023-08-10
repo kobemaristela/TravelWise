@@ -304,7 +304,6 @@ label {
 
 label.error {
   position: relative;
-  background: url("../images/unchecked.gif") no-repeat;
   background-position-y: 3px;
   padding-left: 20px;
   display: block;
