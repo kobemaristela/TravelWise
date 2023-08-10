@@ -37,57 +37,54 @@
             .then(function(response) {
                 let userMessageDiv = document.createElement('div');
                 userMessageDiv.classList.add('user');
-                userMessageDiv.innerText = `${chatInput.value}`;
+                userMessageDiv.innerText = chatInput.value;
                 chatMessages.appendChild(userMessageDiv);
                 
                 let message = response['message'];
                 
                 let messageDiv = document.createElement('div');
                 messageDiv.classList.add('assistant');
-                messageDiv.innerText = `${message}`;
+                messageDiv.innerText = message;
                 
                 chatMessages.appendChild(messageDiv);
+                
+                // TODO: Is there an event I can use for this? 
+                // Is this correct?
+                requestAnimationFrame(() => chatMessages.scrollTo(0, chatMessages.scrollHeight));
             })
             .catch(function(error) {
                 alert(error);
             });
     });
+    
+    window.addEventListener('load', () => {
+        chatMessages.scrollTo(0, chatMessages.scrollHeight);
+    });
 </script>
-<style>
-    #chat-input {
-        width: 100%;
-    }
-    
-    /* TODO: Consider making the following global */    
-    body {
-        height: 100%;
-        
-        /* TODO: We should use a bootsrap class for these instead, but this is a quick, localized hack. */
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-    }
-    
-    /* TODO: Use a selector that is actually sane */
-    body > section {
-        flex-grow: 1;
-        display: flex;
-        
-        /* I hate bootstrap. Fix later. */
-        overflow-x: hidden;
-    }
-    
+<style>    
     /* TODO: Consider making the following global */
     html {
         height: 100%;
     }
     
-    /* TODO: Fix this hack */
-    .row {
-        max-width: 100vw;
+    /* TODO: Consider making the following global */
+    body {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
     }
     
-    /* I feel like I've gone full circle here. Why even Boostrap? */
+    body > section {
+        flex-grow: 1;
+        display: flex;
+        overflow-y: auto;
+    }
+    
+    body > header {
+        display: flex;
+    }
+    
     .user,
     .assistant {
         display: inline;
@@ -96,6 +93,7 @@
         color: white;
         border-radius: 1em;
         max-width: 75%;
+        white-space: pre-line;
     }
     
     .assistant {
@@ -104,18 +102,7 @@
     
     .user {
         background-color: #22b3c1;
-        
         margin-left: 25%;
-    }
-    
-    /* One of the changes I made above negates the section margin, and the header does not play well with flex. Joy. */
-    .container {
-        /*
-        JK, only breaks on mobile. Great.
-        
-        margin-top: 330px;
-        
-        */
     }
     
     #chat-messages {
