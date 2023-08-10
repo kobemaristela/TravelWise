@@ -6,13 +6,16 @@
 {% endblock %} {% block content %}
 
 <section>
-  <div class="container">
-    <input type="text" id="chat-input"></input>
-    <div id="chat-messages">
-        <div>assistant: Hello, I am your travel planning assistant. Where would you like to travel?</div>
+  <div class="container d-flex flex-column flex-grow-1">
+    <div id="chat-messages" class="flex-grow-1 d-flex flex-column">
+        <div class="assistant">Hello, I am your travel planning assistant. Where would you like to travel?</div>
+        
         {% for message in messages %}
-            <div>{{message.role}}: {{message.content}}</div>
+            <div class="{{message.role}}">{{message.content}}</div>
         {% endfor %}
+    </div>
+    <div class="m-4">
+        <input type="text" class="form-control" id="chat-input" placeholder="Enter chat message">
     </div>
   </div>
 </section>
@@ -33,24 +36,77 @@
             .chat(id, chatInput.value)
             .then(function(response) {
                 let userMessageDiv = document.createElement('div');
-                userMessageDiv.innerText = `user: ${chatInput.value}`;
+                userMessageDiv.classList.add('user');
+                userMessageDiv.innerText = chatInput.value;
                 chatMessages.appendChild(userMessageDiv);
                 
                 let message = response['message'];
                 
                 let messageDiv = document.createElement('div');
-                messageDiv.innerText = `assistant: ${message}`;
+                messageDiv.classList.add('assistant');
+                messageDiv.innerText = message;
                 
                 chatMessages.appendChild(messageDiv);
+                
+                // TODO: Is there an event I can use for this? 
+                // Is this correct?
+                requestAnimationFrame(() => chatMessages.scrollTo(0, chatMessages.scrollHeight));
             })
             .catch(function(error) {
                 alert(error);
             });
     });
+    
+    window.addEventListener('load', () => {
+        chatMessages.scrollTo(0, chatMessages.scrollHeight);
+    });
 </script>
-<style>
-    #chat-input {
-        width: 100%;
+<style>    
+    /* TODO: Consider making the following global */
+    html {
+        height: 100%;
+    }
+    
+    /* TODO: Consider making the following global */
+    body {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    
+    body > section {
+        flex-grow: 1;
+        display: flex;
+        overflow-y: auto;
+    }
+    
+    body > header {
+        display: flex;
+    }
+    
+    .user,
+    .assistant {
+        display: inline;
+        margin: 1em;
+        padding: 1em;
+        color: white;
+        border-radius: 1em;
+        max-width: 75%;
+        white-space: pre-line;
+    }
+    
+    .assistant {
+        background-color: #c13022;
+    }
+    
+    .user {
+        background-color: #22b3c1;
+        margin-left: 25%;
+    }
+    
+    #chat-messages {
+        overflow: auto;
     }
 </style>
 {% endblock %}
