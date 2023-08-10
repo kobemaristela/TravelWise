@@ -33,7 +33,12 @@ ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 CSRF_TRUSTED_ORIGINS = os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS").split(" ")
 
 # HTTPS Redirect
+<<<<<<< Updated upstream
 #SECURE_SSL_REDIRECT = not DEBUG
+=======
+SECURE_SSL_REDIRECT = not DEBUG
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https"
+>>>>>>> Stashed changes
 
 # Application definition
 
