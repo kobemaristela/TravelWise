@@ -6,6 +6,18 @@
 {% endblock %} {% block content %}
 
 <section>
+  <div class="activities container d-flex flex-column flex-grow-1">
+    <h2>Activities</h2>
+    <ol>
+        {% for activity in activities %}
+            <li class="activity">
+                <div>Start: {{activity.start_time}}</div>
+                <div>End: {{activity.end_time}}</div>
+                <div>{{activity.note}}</div>
+            </li>
+        {% endfor %}
+    </ol>
+  </div>
   <div class="container d-flex flex-column flex-grow-1">
     <div id="chat-messages" class="flex-grow-1 d-flex flex-column">
         <div class="assistant">Hello, I am your travel planning assistant. Where would you like to travel?</div>
@@ -32,21 +44,23 @@
             return;
         }
         
+        const value = chatInput.value;
+        chatInput.value = '';
+        
         api
-            .chat(id, chatInput.value)
+            .chat(id, value)
             .then(function(response) {
-                let userMessageDiv = document.createElement('div');
+                const userMessageDiv = document.createElement('div');
                 userMessageDiv.classList.add('user');
-                userMessageDiv.innerText = chatInput.value;
+                userMessageDiv.innerText = value;
                 chatMessages.appendChild(userMessageDiv);
                 
-                let message = response['message'];
+                const assistantMessage = response['message'];
                 
-                let messageDiv = document.createElement('div');
-                messageDiv.classList.add('assistant');
-                messageDiv.innerText = message;
-                
-                chatMessages.appendChild(messageDiv);
+                const assistantMessageDiv = document.createElement('div');
+                assistantMessageDiv.classList.add('assistant');
+                assistantMessageDiv.innerText = assistantMessage;
+                chatMessages.appendChild(assistantMessageDiv);
                 
                 // TODO: Is there an event I can use for this? 
                 // Is this correct?
@@ -107,6 +121,18 @@
     
     #chat-messages {
         overflow: auto;
+    }
+    
+    .activity {
+        background-color: #22b3c1;
+        margin: 1em;
+        padding: 1em;
+        color: white;
+        border-radius: 1em;
+    }
+    
+    .activities ol {
+        overflow-y: auto;
     }
 </style>
 {% endblock %}
