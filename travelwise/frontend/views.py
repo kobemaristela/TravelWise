@@ -15,7 +15,18 @@ def landing(request):
 
 @login_required(login_url="landing")
 def home(request):
-    return render(request, 'travel/home.html')
+    travel_plans = []
+    # TODO: Order by name?
+    for travel_plan in TravelPlan.objects.filter(author=request.user):
+        travel_plans.append({
+            'id': travel_plan.id,
+            'name': travel_plan.name,
+        })
+    
+    
+    return render(request, 'travel/home.html', {
+        'travel_plans': travel_plans
+    })
 
 
 def register(request):

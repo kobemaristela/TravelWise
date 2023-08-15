@@ -4,12 +4,25 @@
 {% load crispy_forms_tags %} {% block css %}
 <link rel="stylesheet" href="{% static 'css/travel-header.css' %}" />
 {% endblock %} {% block content %}
-<section>
-  <div class="container">
+<section class="d-flex flex-column">
+  <div class="container d-flex flex-column flex-grow-1">
     <h2>Welcome {{user.username}}</h2>
-    <button id="new-plan-button">New Plan</button>
+    <div class="travel-plans d-flex flex-column flex-grow-1">
+        <h3>Travel Plans</h3>
+        <ul class="flex-grow-1">
+            {% for travel_plan in travel_plans %}
+                <li>
+                    <a href="/create/?id={{travel_plan.id}}">
+                        Travel Plan {{travel_plan.id}}
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+        <button id="new-plan-button">New Plan</button>
+    </div>
   </div>
   <script>
+    // TODO: This should be a form modal + POST request, not a REST call + redirect.
     document.getElementById('new-plan-button').addEventListener('click', function(event) {
         api.createPlan()
         .then(function(response) {
@@ -23,6 +36,44 @@
     });
   </script>
 </section>
+<style>
+    /* TODO: Consider making the following global */
+    html {
+        height: 100%;
+    }
+    
+    /* TODO: Consider making the following global */
+    body {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+    
+    body > header {
+        display: flex;
+    }
+    
+    section {
+        flex-grow: 1;
+    }
+    
+    .travel-plans {
+        align-items: center;
+        margin: 1em;
+    }
+    
+    .travel-plans li {
+        background-color: #22b3c1;
+        border-radius: 1em;
+        padding: 0.5em;
+        margin: 0.5em;
+    }
+    
+    .travel-plans li a {
+        color: white;
+    }
+</style>
 {% endblock %}
 
 {% block scripts %}
