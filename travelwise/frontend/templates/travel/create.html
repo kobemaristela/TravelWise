@@ -1,11 +1,7 @@
-{% extends 'base.html' %} {% load static %} 
+{% extends 'travel/home.html' %} {% load static %} 
 {% block title %}TravelWise - Create Plan{% endblock %} 
 
-{% load crispy_forms_tags %} {% block css %}
-<link rel="stylesheet" href="{% static 'css/travel-header.css' %}" />
-{% endblock %} {% block content %}
-
-<section>
+{% load crispy_forms_tags %}{% block create_plan %}
   <div class="container d-flex flex-column flex-grow-1">
     <div id="chat-messages" class="flex-grow-1 d-flex flex-column">
         <div class="assistant">Hello, I am your travel planning assistant. Where would you like to travel?</div>
@@ -18,7 +14,6 @@
         <input type="text" class="form-control" id="chat-input" placeholder="Enter chat message">
     </div>
   </div>
-</section>
 
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -109,9 +104,5 @@
         overflow: auto;
     }
 </style>
-{% endblock %}
-
-{% block scripts %}
-<script src="{% static 'js/api.js' %}"></script>
 {% endblock %}
 
