@@ -4,7 +4,7 @@
 {% load crispy_forms_tags %}
 
 {% block create_plan %}
-<div class="d-flex flex-row flex-grow-1 overflow-y-auto">
+<div class="create-container d-flex flex-row flex-grow-1 overflow-y-auto">
     <div class="activities container d-flex flex-column flex-grow-1">
         <h2>Activities</h2>
         <ol>
@@ -100,7 +100,7 @@
     
     .user,
     .assistant,
-    .function    {
+    .function {
         display: inline;
         margin: 1em;
         padding: 1em;
@@ -142,6 +142,30 @@
     .site-section {
         overflow-y: auto;
         justify-content: center;
+    }
+    
+    .create-container {
+        background-color: #22b3c1;
+        color: white;
+        padding: 1em;
+        border-radius: 1em;
+        gap: 0.5em;
+    }
+    
+    .create-container > * {
+        background-color: #5603AD;
+         border-radius: 0.5em;
+    }
+    
+    .create-container ol {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+    
+    .create-container h2 {
+        font-size: 2rem;
+        margin: 0.2em;
     }
 </style>
 {% endblock %}
