@@ -40,6 +40,22 @@ OPENAI_FUNCTIONS = [
             ],
         },
     },
+    {
+        'name': 'delete_activity',
+        'description': 'Delete a travel activity for a user.',
+        'parameters': {
+            'type': 'object',
+            'properties': {
+                'id': {
+                    'type': 'integer',
+                    'description': 'The id of the activity to be deleted',
+                }
+            },
+            'required': [
+                'id',
+            ]
+        },
+    }
 ]
 
 def chat(request):
@@ -76,29 +92,49 @@ def chat(request):
     # Prevent OpenAI API calls when testing
     # return JsonResponse({ 'message': 'Test Response' })
     
-    def create_activity(start_time, end_time, note=None):
+    def create_activity(function_arguments):
+        start_time = function_arguments.get('start_time')
+        end_time = function_arguments.get('end_time')
+        note = function_arguments.get('note')
+        
         start_time = datetime.datetime.fromisoformat(start_time)
         end_time = datetime.datetime.fromisoformat(end_time)
         
-        Activity.objects.create(
+        activity = Activity.objects.create(
             start_time=start_time,
             end_time=end_time,
             note=note,
             plan=travel_plan,
         )
         
+        return f'Created activity with id \"{activity.pk}\"'
+        
+    def delete_activity(function_arguments):
+        id = function_arguments.get('id')
+        
+        id = int(id)
+        
+        Activity.objects.filter(pk=id, plan=travel_plan).delete()
+        
+        return f'Deleted activity with id \"{id}\"'
+        
     messages = [
         { 
             'role': 'system', 
             'content': 'You are an assistant for organizing travel plans.',
-        }
+        },
     ]
     
     for stored_message in ChatMessage.objects.filter(plan=travel_plan).order_by('time'):
-        messages.append({
+        messageDict = {
             'role': stored_message.user,
             'content': stored_message.msg,
-        })
+        }
+        
+        if stored_message.user == 'function':
+            messageDict['name'] = stored_message.function_name
+            
+        messages.append(messageDict)
     
     messages.append({
         'role': 'user',
@@ -113,29 +149,28 @@ def chat(request):
     )
     response_message = chat_completion.choices[0].message
     
+    function_message = None
+    
     response_message_function_call = response_message.get('function_call')
     if response_message_function_call is not None:
         function_table = {
             'create_activity': create_activity,
+            'delete_activity': delete_activity,
         }
         
         function_name = response_message_function_call['name']
         function = function_table[function_name]
         function_arguments = json.loads(response_message_function_call['arguments'])
         
-        function_response = function(
-            start_time=function_arguments.get('start_time'),
-            end_time=function_arguments.get('end_time'),
-            note=function_arguments.get('note'),
-        )
+        function_response = function(function_arguments)
         messages.append(response_message)
-        messages.append(
-            {
-                'role': 'function',
-                'name': function_name,
-                'content': 'ok', # TODO: Use function_response, return errors here as well.
-            }
-        )
+        
+        function_message = {
+            'role': 'function',
+            'name': function_name,
+            'content': function_response, # TODO: Return errors here as well.
+        }
+        messages.append(function_message)
         
         chat_completion = openai.ChatCompletion.create(
             model=OPENAI_MODEL, 
@@ -145,8 +180,26 @@ def chat(request):
         )
         response_message = chat_completion.choices[0].message
         
-    ChatMessage(time=datetime.datetime.now(), user='user', msg=message, plan=travel_plan).save()
-    ChatMessage(time=datetime.datetime.now(), user='assistant', msg=response_message.content, plan=travel_plan).save()
+    ChatMessage(
+        time=datetime.datetime.now(), 
+        user='user', 
+        msg=message, 
+        plan=travel_plan
+    ).save()
+    if function_message is not None:
+        ChatMessage(
+            time=datetime.datetime.now(), 
+            user='function', 
+            msg=function_message['content'], 
+            function_name=function_message['name'], 
+            plan=travel_plan
+        ).save()
+    ChatMessage(
+        time=datetime.datetime.now(), 
+        user='assistant', 
+        msg=response_message.content, 
+        plan=travel_plan
+    ).save()
     
     # StreamingHttpResponse(event_stream(), content_type='text/event-stream')
     return JsonResponse({ 'message': response_message.content })

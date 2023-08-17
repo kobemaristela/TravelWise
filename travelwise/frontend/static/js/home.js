@@ -25,17 +25,5 @@ $(function () {
       }
     }
   });
-
-  document.getElementById('new-plan-button').addEventListener('click', function(e) {
-    api.createPlan()
-    .then(function(response) {
-        const planId = response.planId;
-        
-        window.location.href = `/create/?id=${planId}`;
-    })
-    .catch(function (error) {
-        alert('Failed to create plan');
-    });
-  });
 });
 

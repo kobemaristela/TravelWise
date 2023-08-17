@@ -7,6 +7,7 @@ from django.apps import apps
 
 TravelPlan = apps.get_model('api', 'TravelPlan')
 ChatMessage = apps.get_model('api', 'ChatMessage')
+Activity = apps.get_model('api', 'Activity')
 
 def landing(request):
     return render(request, "index.html")
@@ -14,7 +15,18 @@ def landing(request):
 
 @login_required(login_url="landing")
 def home(request):
-    return render(request, 'travel/home.html')
+    travel_plans = []
+    # TODO: Order by name?
+    for travel_plan in TravelPlan.objects.filter(author=request.user):
+        travel_plans.append({
+            'id': travel_plan.id,
+            'name': travel_plan.name,
+        })
+    
+    
+    return render(request, 'travel/home.html', {
+        'travel_plans': travel_plans
+    })
 
 
 def register(request):
@@ -73,6 +85,14 @@ def create_plan(request):
     if travel_plan is None:
         return redirect('home')
         
+    activities = []
+    for stored_activity in Activity.objects.filter(plan=travel_plan).order_by('start_time'):
+        activities.append({
+            'start_time': stored_activity.start_time,
+            'end_time': stored_activity.end_time,
+            'note': stored_activity.note,
+        })
+        
     messages = []
     for stored_message in ChatMessage.objects.filter(plan=travel_plan).order_by('time'):
         messages.append({
@@ -82,4 +102,5 @@ def create_plan(request):
         
     return render(request, 'travel/create.html', {
         'messages': messages,
+        'activities': activities,
     })

@@ -27,4 +27,5 @@ class ChatMessage(models.Model):
     time = models.TimeField()
     user = models.TextField()
     msg = models.TextField()
+    function_name = models.CharField(max_length=100, blank=True, default='')
     plan = models.ForeignKey(TravelPlan, on_delete=models.CASCADE)
