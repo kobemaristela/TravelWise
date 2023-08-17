@@ -1,7 +1,7 @@
-{% extends 'base.html' %} {% load static %} {% block title %}TravelWise -
-SignUp{% endblock %}
+{% extends 'base.html' %} {% load static %} 
+{% block title %}TravelWise - SignUp{% endblock %}
 
- {% load crispy_forms_tags %} {% block css %}
+{% load crispy_forms_tags %} {% block css %}
 <link rel="stylesheet" href="{% static 'css/form.css' %}" />
 <link rel="stylesheet" href="{% static 'css/header.css' %}" />
 {% endblock %} 
@@ -104,6 +104,7 @@ SignUp{% endblock %}
     </div>
   </div>
 </section>
+
 {% endblock %} {% block scripts %}
 <script src="{% static 'js/register.js' %}"></script>
 {% endblock %}
