@@ -1,14 +1,13 @@
-{% extends 'base.html' %} {% load static %} 
+{% extends 'travel/home.html' %} {% load static %} 
 {% block title %}TravelWise - Create Plan{% endblock %} 
 
-{% load crispy_forms_tags %} {% block css %}
-<link rel="stylesheet" href="{% static 'css/travel-header.css' %}" />
-{% endblock %} {% block content %}
+{% load crispy_forms_tags %}
 
-<section>
-  <div class="activities container d-flex flex-column flex-grow-1">
-    <h2>Activities</h2>
-    <ol>
+{% block create_plan %}
+<div class="d-flex flex-row flex-grow-1 overflow-y-auto">
+    <div class="activities container d-flex flex-column flex-grow-1">
+        <h2>Activities</h2>
+        <ol>
         {% for activity in activities %}
             <li class="activity">
                 <div>Start: {{activity.start_time}}</div>
@@ -16,21 +15,21 @@
                 <div>{{activity.note}}</div>
             </li>
         {% endfor %}
-    </ol>
-  </div>
-  <div class="container d-flex flex-column flex-grow-1">
-    <div id="chat-messages" class="flex-grow-1 d-flex flex-column">
+        </ol>
+    </div>
+    <div class="container d-flex flex-column flex-grow-1">
+        <div id="chat-messages" class="flex-grow-1 d-flex flex-column">
         <div class="assistant">Hello, I am your travel planning assistant. Where would you like to travel?</div>
-        
+            
         {% for message in messages %}
-            <div class="{{message.role}}">{{message.content}}</div>
+        <div class="{{message.role}}">{{message.content}}</div>
         {% endfor %}
+        </div>
+        <div class="m-4">
+            <input type="text" class="form-control" id="chat-input" placeholder="Enter chat message">
+        </div>
     </div>
-    <div class="m-4">
-        <input type="text" class="form-control" id="chat-input" placeholder="Enter chat message">
-    </div>
-  </div>
-</section>
+</div>
 
 <script>
     const urlParams = new URLSearchParams(window.location.search);
@@ -139,10 +138,11 @@
     .activities ol {
         overflow-y: auto;
     }
+    
+    .site-section {
+        overflow-y: auto;
+        justify-content: center;
+    }
 </style>
-{% endblock %}
-
-{% block scripts %}
-<script src="{% static 'js/api.js' %}"></script>
 {% endblock %}
 
