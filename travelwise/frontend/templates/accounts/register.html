@@ -2,15 +2,8 @@
 SignUp{% endblock %}
 
  {% load crispy_forms_tags %} {% block css %}
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css"
-  integrity="sha512-rRQtF4V2wtAvXsou4iUAs2kXHi3Lj9NE7xJR77DE7GHsxgY9RTWy93dzMXgDIG8ToiRTD45VsDNdTiUagOFeZA=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
 <link rel="stylesheet" href="{% static 'css/form.css' %}" />
-<link rel="stylesheet" href="{% static 'css/travel-header.css' %}" />
+<link rel="stylesheet" href="{% static 'css/header.css' %}" />
 {% endblock %} 
 
 {% block header %}{% include 'components/header.html' %}{% endblock %} 
@@ -112,11 +105,5 @@ SignUp{% endblock %}
   </div>
 </section>
 {% endblock %} {% block scripts %}
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-  integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
 <script src="{% static 'js/register.js' %}"></script>
 {% endblock %}
