@@ -1,49 +1,11 @@
 {% extends 'base.html' %} {% load static %} 
-{% block title %}TravelWise - Home{% endblock %} 
+{% block title %}TravelWise - Home{% endblock %}
+
+{% block navbar %}{% include 'components/navbar.html' %}{% endblock %}
 
 {% load crispy_forms_tags %} {% block css %}
-<link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Source+Serif+Pro:400,600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
 {% endblock %} {% block content %}
-<aside class="sidebar">
-  <div class="toggle">
-    <a href="#" class="burger js-menu-toggle" data-toggle="collapse" data-target="#main-navbar">
-          <span></span>
-        </a>
-  </div>
-  <div class="side-inner">
-    <div class="profile">
-      <!-- Update to be more dynamic -->
-      <img src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairFroBand&accessoriesType=Prescription02&hairColor=SilverGray&facialHairType=BeardMajestic&facialHairColor=Platinum&clotheType=GraphicShirt&clotheColor=PastelBlue&graphicType=Bat&eyeType=Default&eyebrowType=RaisedExcited&mouthType=Sad&skinColor=Pale' class="img-fluid"/>
-      <h3 class="name">{{user.username}}</h3>
-    </div>
-
-    <div class="counter d-flex justify-content-center">
-        <div class="col">
-          <strong class="number">0</strong>
-          <span class="number-label">Planned</span>
-        </div>
-        <div class="col">
-          <strong class="number">0</strong>
-          <span class="number-label">Completed</span>
-        </div>
-    </div>
-    
-    <div class="nav-menu">
-      <ul>
-        <li class="active"><a href="{% url 'home' %}"><span class="fa-sharp fa-solid fa-house"></span> Home</a></li>
-        <li><a href="#"><span class="fa-solid fa-plus"></span> Create Plan</a></li>
-        <li><a href="#"><span class="fa-solid fa-calendar"></span> My Plans</a></li>
-        <li><a href="{% url 'logout' %}"><span class="fa-solid fa-right-from-bracket"></span> Log out</a></li>
-      </ul>
-    </div>
-  </div>
-  
-</aside>
 <main>
   <div class="site-section d-flex flex-grow-1">
       <div class="container d-flex flex-column">
@@ -134,5 +96,5 @@
 <script src="{% static 'js/api.js' %}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js" integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="{% static 'js/home.js' %}"></script>
+<script src="{% static 'js/navbar.js' %}"></script>
 {% endblock %}

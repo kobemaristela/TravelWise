@@ -1,0 +1,25 @@
+{% load static %}
+<header class="header-area header-sticky">
+  <div class="row">
+    <div class="col-12">
+      <nav class="main-nav">
+        <a href="{% url 'landing' %}" class="logo">
+          <img src="{% static 'images/logo.png' %}" alt="" />
+        </a>
+        <ul class="nav">
+          {% if user.is_authenticated %}
+          <li><a href="{% url 'home' %}">Home</a></li>
+          <li><a href="{% url 'logout' %}">Logout</a></li>
+          {% else %} {% if request.resolver_match.view_name == "login" %}
+          <li><a href="{% url 'register' %}">Register</a></li>
+          {% else %}
+          <li><a href="{% url 'login' %}">Login</a></li>
+          {% endif %} {% endif %}
+        </ul>
+        <a class="menu-trigger">
+          <span>Menu</span>
+        </a>
+      </nav>
+    </div>
+  </div>
+</header>

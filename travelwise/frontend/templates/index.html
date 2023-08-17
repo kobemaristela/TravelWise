@@ -1,12 +1,12 @@
 {% extends 'base.html' %} {% load static %} 
-{% block title %}TravelWise{% endblock %} 
+{% block title %}TravelWise{% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" integrity="sha512-siarrzI1u3pCqFG2LEzi87McrBmq6Tp7juVsdmGY1Dr8Saw+ZBAzDzrGwX3vgxX1NkioYNCFOVC0GpDPss10zQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" integrity="sha512-c42qTSw/wPZ3/5LBzD+Bw5f7bSF2oxou6wEb+I/lqeaKV5FDIfMvvRp772y4jcJLKuGUOpbJMdg/BTl50fJYAw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.1.0/swiper-bundle.min.css" integrity="sha512-1mKT2l92H6btoIkk6fIotzeArJ3G59u/xMsDyBb/XROahx4zpXeXucqzVYssrrK0AHSNjSfe4QVE/loSr85jfA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-<link rel="stylesheet" href="{% static 'css/main.css' %}" />
+<link rel="stylesheet" href="{% static 'css/index.css' %}" />
 {% endblock %} {% block preloader %}
 <div id="js-preloader" class="js-preloader">
   <div class="preloader-inner">
@@ -20,35 +20,7 @@
 </div>
 {% endblock %} 
 
-{% block header %}
-<header class="header-area header-sticky">
-  <div class="row">
-    <div class="col-12">
-      <nav class="main-nav">
-        <!-- ***** Logo Start ***** -->
-        <a href="{% url 'landing' %}" class="logo">
-          <img src="{% static 'images/logo.png' %}" alt="" />
-        </a>
-        <!-- ***** Logo End ***** -->
-        <!-- ***** Menu Start ***** -->
-        <ul class="nav">
-          {% if user.is_authenticated %}
-          <li><a href="{% url 'home' %}">Home</a></li>
-          <li><a href="{% url 'logout' %}">Logout</a></li>
-          {% else %}
-          <li><a href="{% url 'login' %}">Login</a></li>
-          {% endif %}
-        </ul>
-        <a class="menu-trigger">
-          <span>Menu</span>
-        </a>
-        <!-- ***** Menu End ***** -->
-      </nav>
-    </div>
-  </div>
-</header>
-{% endblock %} 
-
+{% block header %}{% include 'components/header.html' %}{% endblock %} 
 
 {% block banner %}
 <section id="section-1">

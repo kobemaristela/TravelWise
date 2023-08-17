@@ -7,36 +7,7 @@
 <link rel="stylesheet" href="{% static 'css/travel-header.css' %}" />
 {% endblock %} 
 
-{% block header %}
-<header class="header-area header-sticky">
-  <div class="row">
-    <div class="col-12">
-      <nav class="main-nav">
-        <!-- ***** Logo Start ***** -->
-        <a href="{% url 'landing' %}" class="logo">
-          <img src="{% static 'images/logo.png' %}" alt="" />
-        </a>
-        <!-- ***** Logo End ***** -->
-        <!-- ***** Menu Start ***** -->
-        <ul class="nav">
-          {% if user.is_authenticated %}
-          <li><a href="{% url 'home' %}">Home</a></li>
-          <li><a href="{% url 'logout' %}">Logout</a></li>
-          {% else %}
-          <li><a href="{% url 'register' %}">Register</a></li>
-          {% endif %}
-        </ul>
-        <a class="menu-trigger">
-          <span>Menu</span>
-        </a>
-        <!-- ***** Menu End ***** -->
-      </nav>
-    </div>
-  </div>
-</header>
-{% endblock %} 
-
-
+{% block header %}{% include 'components/header.html' %}{% endblock %} 
 
 {% block content %}
 <section class="sign-in">
