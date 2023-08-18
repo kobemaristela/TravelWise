@@ -5,4 +5,5 @@ urlpatterns = [
     path('chat/', views.chat, name='chat'),
     path('plan/', views.plan, name='plan'),
     re_path(r'^validateUser/(?P<username>\w{1,50})/$', views.validateUser, name='validateUser'),
+    re_path(r'^deletePlan/(?P<plan_id>\d{1,40})/$', views.delete_plan, name='deletePlan'),
 ]

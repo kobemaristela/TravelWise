@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
 from django.http import StreamingHttpResponse
 from django.http import JsonResponse
 from django.contrib.auth.models import User
@@ -204,17 +205,14 @@ def chat(request):
     # StreamingHttpResponse(event_stream(), content_type='text/event-stream')
     return JsonResponse({ 'message': response_message.content })
 
+
+@login_required(login_url="landing")
 def plan(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({ 'error': 'Unauthorized' }, status=HTTPStatus.UNAUTHORIZED)
-        
-    if request.method != 'POST':
-        return JsonResponse({ 'error': 'Invalid Method' }, status=HTTPStatus.METHOD_NOT_ALLOWED)
-        
-    new_travel_plan = TravelPlan(name='WIP', author=request.user, note='WIP')
-    new_travel_plan.save()
+    if request.method == 'GET':
+        new_travel_plan = TravelPlan(name='WIP', author=request.user, note='WIP')
+        new_travel_plan.save()
     
-    return JsonResponse({ 'planId': new_travel_plan.pk })
+    return redirect(f"/create/?id={new_travel_plan.pk}")
 
 
 def validateUser(request, username=None):
@@ -224,3 +222,14 @@ def validateUser(request, username=None):
         
         return JsonResponse({"message": "good"})
 
+
+@login_required(login_url="landing")
+def delete_plan(request, plan_id):
+    if request.method == 'GET':
+        try:
+            TravelPlan.objects.get(pk=plan_id, author=request.user).delete()
+        except Exception as err:
+            return JsonResponse({'error': f'{err}'}, status=HTTPStatus.BAD_REQUEST)
+
+        return redirect("history")
+        
