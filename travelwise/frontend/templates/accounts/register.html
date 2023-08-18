@@ -1,46 +1,12 @@
-{% extends 'base.html' %} {% load static %} {% block title %}TravelWise -
-SignUp{% endblock %} {% load crispy_forms_tags %} {% block css %}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha512-rRQtF4V2wtAvXsou4iUAs2kXHi3Lj9NE7xJR77DE7GHsxgY9RTWy93dzMXgDIG8ToiRTD45VsDNdTiUagOFeZA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+{% extends 'base.html' %} {% load static %} 
+{% block title %}TravelWise - SignUp{% endblock %}
+
+{% load crispy_forms_tags %} {% block css %}
 <link rel="stylesheet" href="{% static 'css/form.css' %}" />
-<link rel="stylesheet" href="{% static 'css/travel-header.css' %}" />
-<link
-  rel="stylesheet"
-  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-  integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-/>
+<link rel="stylesheet" href="{% static 'css/header.css' %}" />
 {% endblock %} 
 
-{% block unauth_menu %}
-<header class="header-area header-sticky">
-  <div class="row">
-    <div class="col-12">
-      <nav class="main-nav">
-        <!-- ***** Logo Start ***** -->
-        <a href="{% url 'landing' %}" class="logo">
-          <img src="{% static 'images/logo.png' %}" alt="" />
-        </a>
-        <!-- ***** Logo End ***** -->
-        <!-- ***** Menu Start ***** -->
-        <ul class="nav">
-          {% if user.is_authenticated %}
-          <li><a href="{% url 'home' %}">Home</a></li>
-          <li><a href="{% url 'logout' %}">Logout</a></li>
-          {% else %}
-          <li><a href="{% url 'login' %}">Login</a></li>
-          {% endif %}
-        </ul>
-        <a class="menu-trigger">
-          <span>Menu</span>
-        </a>
-        <!-- ***** Menu End ***** -->
-      </nav>
-    </div>
-  </div>
-</header>
-{% endblock %} 
-
+{% block header %}{% include 'components/header.html' %}{% endblock %} 
 
 {% block content %}
 <section class="signup">
@@ -54,7 +20,12 @@ SignUp{% endblock %} {% load crispy_forms_tags %} {% block css %}
             <label for="username"
               ><i class="zmdi zmdi-account material-icons-name"></i
             ></label>
-            <input type="text" name="username" id="username" placeholder="Username" />
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="Username"
+            />
             <div class="valid-feedback">Username is available</div>
             <div class="invalid-feedback">Username already taken</div>
           </div>
@@ -73,7 +44,9 @@ SignUp{% endblock %} {% load crispy_forms_tags %} {% block css %}
             />
           </div>
           <div class="form-group">
-            <label for="password2"><i class="zmdi zmdi-lock-outline"></i></label>
+            <label for="password2"
+              ><i class="zmdi zmdi-lock-outline"></i
+            ></label>
             <input
               type="password"
               name="password2"
@@ -94,9 +67,7 @@ SignUp{% endblock %} {% load crispy_forms_tags %} {% block css %}
         </form>
       </div>
       <div class="signup-image" id="signup-image">
-          <img
-            src="{% static 'images/deals-01.jpg' %}"
-          />
+        <img src="{% static 'images/deals-01.jpg' %}" />
       </div>
 
       <div class="col-6 mt-4 mt-xxl-0 w-auto h-auto">
@@ -133,12 +104,7 @@ SignUp{% endblock %} {% load crispy_forms_tags %} {% block css %}
     </div>
   </div>
 </section>
+
 {% endblock %} {% block scripts %}
-<script
-  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"
-  integrity="sha512-3gJwYpMe3QewGELv8k/BX9vcqhryRdzRMxVfq6ngyWXwo03GFEzjsUm8Q7RZcHPHksttq7/GFoxjCVUjkjvPdw=="
-  crossorigin="anonymous"
-  referrerpolicy="no-referrer"
-></script>
 <script src="{% static 'js/register.js' %}"></script>
 {% endblock %}
