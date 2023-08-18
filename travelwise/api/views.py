@@ -229,7 +229,7 @@ def delete_plan(request, plan_id):
         try:
             TravelPlan.objects.get(pk=plan_id, author=request.user).delete()
         except Exception as err:
-            return JsonResponse({'error': f'{err}'}, status=HTTPStatus.BAD_REQUEST)
+            return JsonResponse({'error': 'Plan was not deleted'}, status=HTTPStatus.BAD_REQUEST)
 
         return redirect("history")
         
