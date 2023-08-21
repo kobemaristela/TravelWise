@@ -42,20 +42,20 @@
                     {% csrf_token %}
                     <div class="col-md-6">
                         <div class="form-group mb-3">
-                            <label for="account-fn" class="form-label">First Name</label>
-                            <input class="form-control" type="text" id="account-fn" name="first_name" value="{{ user.first_name }}" required>
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input class="form-control" type="text" id="first_name" name="first_name" value="{{ user.first_name }}" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="account-ln" class="form-label">Last Name</label>
-                            <input class="form-control" type="text" id="account-ln" name="last_name" value="{{ user.last_name }}" required>
+                            <label for="last_name-ln" class="form-label">Last Name</label>
+                            <input class="form-control" type="text" id="last_name-ln" name="last_name" value="{{ user.last_name }}" required>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="account-email" class="form-label">Email Address</label>
-                            <input class="form-control" type="email" id="account-email" name="email" value="{{ user.email }}" disabled>
+                            <label for="email" class="form-label">Email Address</label>
+                            <input class="form-control" type="email" id="email" name="email" value="{{ user.email }}" disabled>
                         </div>
                     </div>
                     <!-- Filled in to make rows even -->
@@ -67,14 +67,14 @@
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="account-pass" class="form-label">New Password</label>
-                            <input class="form-control" type="password" id="account-pass" name="new_password">
+                            <label for="new_password" class="form-label">New Password</label>
+                            <input class="form-control" type="password" id="new_password" name="new_password">
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <label for="account-confirm-pass" class="form-label">Confirm Password</label>
-                            <input class="form-control" type="password" id="account-confirm-pass" name="confirm_password">
+                            <label for="confirm_password" class="form-label">Confirm Password</label>
+                            <input class="form-control" type="password" id="confirm_password" name="confirm_password">
                         </div>
                     </div>
                     <div class="col-12">
