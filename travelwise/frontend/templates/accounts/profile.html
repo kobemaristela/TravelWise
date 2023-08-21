@@ -29,11 +29,20 @@
                         <i class="fe-icon-user me-2"></i>Profile Settings
                     </a>
                 </nav>
-                {% for message in messages %}
-                <div class="alert alert-warning">
-                {{ message }}
-                </div>
+                {% if form.errors %}
+                {% for field in form %}
+                    {% for error in field.errors %}
+                        <div class="alert alert-warning">
+                            {{ error|escape }}
+                        </div>
+                    {% endfor %}
                 {% endfor %}
+                {% for error in form.non_field_errors %}
+                    <div class="alert alert-warning">
+                        {{ error|escape }}
+                    </div>
+                {% endfor %}
+            {% endif %}
             </div>
 
             <!-- Profile Settings-->
