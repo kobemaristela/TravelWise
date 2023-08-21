@@ -115,3 +115,23 @@ def history_view(request):
         return render(request, 'travel/history.html', {
             'travel_plans': travel_plans
         })
+
+
+@login_required(login_url="landing")
+def profile_view(request):
+    if request.method == 'POST':
+        request.user.first_name = request.POST.get('first_name')
+        request.user.last_name = request.POST.get('last_name')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+
+        if new_password != confirm_password:
+            messages.error(request, 'The passwords do not match')
+            return render(request, 'accounts/profile.html')
+
+
+        request.user.password = new_password
+        request.user.save()
+
+    return render(request, 'accounts/profile.html')
+    
