@@ -138,7 +138,3 @@ def profile_view(request):
         return render(request, 'accounts/profile.html', {'form': form})  # Returns form error
 
     return render(request, 'accounts/profile.html')
-
-
-
-
