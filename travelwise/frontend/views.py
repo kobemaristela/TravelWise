@@ -17,18 +17,7 @@ def landing(request):
 
 @login_required(login_url="landing")
 def home(request):
-    travel_plans = []
-    # TODO: Order by name?
-    for travel_plan in TravelPlan.objects.filter(author=request.user):
-        travel_plans.append({
-            'id': travel_plan.id,
-            'name': travel_plan.name,
-        })
-    
-    
-    return render(request, 'travel/home.html', {
-        'travel_plans': travel_plans
-    })
+    return render(request, 'travel/home.html')
 
 
 def register(request):
@@ -103,8 +92,26 @@ def create_plan(request):
             'role': stored_message.user,
             'content': stored_message.msg,
         })
-        
+    
+    travel_plan.save()  # Updates last_modified time
+
     return render(request, 'travel/create.html', {
         'messages': messages,
         'activities': activities,
     })
+
+
+@login_required(login_url="landing")
+def history_view(request):
+    if request.method == 'GET':
+        travel_plans = []
+        for travel_plan in TravelPlan.objects.filter(author=request.user):
+            travel_plans.append({
+                'id': travel_plan.id,
+                'completed': travel_plan.completed,
+            })
+        
+        
+        return render(request, 'travel/history.html', {
+            'travel_plans': travel_plans
+        })

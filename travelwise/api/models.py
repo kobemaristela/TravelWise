@@ -6,10 +6,12 @@ class TravelPlan(models.Model):
     name = models.TextField()
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     note = models.TextField()
+    completed = models.BooleanField(default=False)
     created_on = models.DateTimeField(auto_now_add=True)
+    last_modified = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ['created_on']
+        ordering = ['last_modified']
 
         def __unicode__(self):
             return self.name
