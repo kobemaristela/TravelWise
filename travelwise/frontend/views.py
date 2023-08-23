@@ -111,7 +111,6 @@ def history_view(request):
         
         return render(request, 'travel/history.html', {
             'travel_plans': travel_plans
-        })
 
 
 @login_required(login_url="landing")
@@ -137,3 +136,4 @@ def profile_view(request):
 
 
     return render(request, 'accounts/profile.html', {'form': form})
+
