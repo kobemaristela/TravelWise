@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages as dj_msg
 from django.apps import apps
 from .forms import RegisterForm
 
@@ -56,7 +57,7 @@ def login_view(request):
     else:
         form = AuthenticationForm()
 
-    return render(request, 'accounts/login.html', {"form": form})
+    return render(request, 'accounts/login.html', {"form": form})   # Catches form errors
 
 
 @login_required(login_url="landing")
@@ -110,7 +111,7 @@ def history_view(request):
         
         
         return render(request, 'travel/history.html', {
-            'travel_plans': travel_plans
+            'travel_plans': travel_plans})
 
 
 @login_required(login_url="landing")
@@ -130,10 +131,14 @@ def profile_view(request):
 
         form = SetPasswordForm(user=request.user, data=data)
         if form.is_valid():
-            form.save()
-    else:
-        form = {}
+            user = form.save()
+            login(request, user)
+            return redirect("profile")
+
+        return render(request, 'accounts/profile.html', {'form': form})  # Returns form error
+
+    return render(request, 'accounts/profile.html')
 
 
-    return render(request, 'accounts/profile.html', {'form': form})
+
 
