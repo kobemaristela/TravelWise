@@ -23,11 +23,11 @@ OPENAI_FUNCTIONS = [
             'properties': {
                 'start_time': {
                     'type': 'string',
-                    'description': 'The start ISO 8601 date time of the event',
+                    'description': 'The start ISO 8601 UTC date time of the event',
                 },
                 'end_time': {
                     'type': 'string',
-                    'description': 'The end ISO 8601 date time of the event',
+                    'description': 'The end ISO 8601 UTC date time of the event',
                 },
                 'note': {
                     'type': 'string',
@@ -53,9 +53,37 @@ OPENAI_FUNCTIONS = [
             },
             'required': [
                 'id',
-            ]
+            ],
         },
-    }
+    },
+    {
+        'name': 'update_activity',
+        'description': 'Update the parameters for an activity.',
+        'parameters': {
+            'type': 'object',
+            'properties': {
+                'id': {
+                    'type': 'integer',
+                    'description': 'The id of the activity to be updated',
+                },
+                'start_time': {
+                    'type': 'string',
+                    'description': 'The new start ISO 8601 UTC date time of the event',
+                },
+                'end_time': {
+                    'type': 'string',
+                    'description': 'The new end ISO 8601 UTC date time of the event',
+                },
+                'note': {
+                    'type': 'string',
+                    'description': 'The new description of the activity',
+                },
+            },
+            'required': [
+                'id',
+            ],
+        },
+    },
 ]
 
 def chat(request):
@@ -118,6 +146,31 @@ def chat(request):
         
         return f'Deleted activity with id \"{id}\"'
         
+    def update_activity(function_arguments):
+        id = function_arguments.get('id')
+        start_time = function_arguments.get('start_time')
+        end_time = function_arguments.get('end_time')
+        note = function_arguments.get('note')
+        
+        message = f'Updated activity with id \"{id}\"'
+        
+        activity = Activity.objects.filter(pk=id, plan=travel_plan).first()
+        if activity is None:
+            return f'Activity with id \"{id}\" does not exist'
+        
+        if start_time is not None:
+            activity.start_time = start_time
+            message += f', Start Time set to {start_time}'
+        if end_time is not None:
+            activity.end_time = end_time
+            message += f', End Time set to {end_time}'
+        if note is not None:
+            activity.note = note
+            message += f', Note set to {note}'
+        activity.save()
+        
+        return message
+        
     messages = [
         { 
             'role': 'system', 
@@ -156,6 +209,7 @@ def chat(request):
         function_table = {
             'create_activity': create_activity,
             'delete_activity': delete_activity,
+            'update_activity': update_activity,
         }
         
         function_name = response_message_function_call['name']
@@ -215,7 +269,6 @@ def plan(request):
     new_travel_plan.save()
     
     return JsonResponse({ 'planId': new_travel_plan.pk })
-
 
 def validateUser(request, username=None):
     if request.method == 'GET':
