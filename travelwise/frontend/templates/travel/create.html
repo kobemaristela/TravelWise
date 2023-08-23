@@ -1,172 +1,194 @@
-{% extends 'travel/home.html' %} {% load static %} 
-{% block title %}TravelWise - Create Plan{% endblock %} 
-
-{% load crispy_forms_tags %}
-
-{% block create_plan %}
-<div class="create-container d-flex flex-row flex-grow-1 overflow-y-auto">
-    <div class="activities container d-flex flex-column flex-grow-1">
-        <h2>Activities</h2>
-        <ol>
-        {% for activity in activities %}
+{% extends 'base.html' %} {% load static %} {% block title %}TravelWise - Create
+Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% endblock %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
+{% endblock %} {% load crispy_forms_tags %} {% block content %}
+<main>
+  <div class="site-section d-flex flex-grow-1">
+    <div class="container d-flex flex-column">
+      <div class="create-container d-flex flex-row flex-grow-1 overflow-y-auto">
+        <div class="activities container d-flex flex-column flex-grow-1">
+          <h2>Activities</h2>
+          <ol>
+            {% for activity in activities %}
             <li class="activity">
-                <div>Start: {{activity.start_time}}</div>
-                <div>End: {{activity.end_time}}</div>
-                <div>{{activity.note}}</div>
+              <div>Start: {{activity.start_time}}</div>
+              <div>End: {{activity.end_time}}</div>
+              <div>{{activity.note}}</div>
             </li>
-        {% endfor %}
-        </ol>
-    </div>
-    <div class="container d-flex flex-column flex-grow-1">
-        <div id="chat-messages" class="flex-grow-1 d-flex flex-column">
-        <div class="assistant">Hello, I am your travel planning assistant. Where would you like to travel?</div>
-            
-        {% for message in messages %}
-        <div class="{{message.role}}">{{message.content}}</div>
-        {% endfor %}
+            {% endfor %}
+          </ol>
         </div>
-        <div class="m-4">
-            <input type="text" class="form-control" id="chat-input" placeholder="Enter chat message">
+        <div class="container d-flex flex-column flex-grow-1">
+          <div id="chat-messages" class="flex-grow-1 d-flex flex-column">
+            <div class="assistant">
+              Hello, I am your travel planning assistant. Where would you like
+              to travel?
+            </div>
+
+            {% for message in messages %}
+            <div class="{{message.role}}">{{message.content}}</div>
+            {% endfor %}
+          </div>
+          <div class="m-4">
+            <input
+              type="text"
+              class="form-control"
+              id="chat-input"
+              placeholder="Enter chat message"
+            />
+          </div>
         </div>
+      </div>
     </div>
-</div>
+  </div>
+</main>
 
 <script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get('id');
-    
-    let chatInput = document.getElementById('chat-input');
-    let chatMessages = document.getElementById('chat-messages');
-    
-    chatInput.addEventListener('keydown', function(event) {
-        if(event.keyCode !== 13) {
-            return;
-        }
-        
-        const value = chatInput.value;
-        chatInput.value = '';
-        
-        api
-            .chat(id, value)
-            .then(function(response) {
-                const userMessageDiv = document.createElement('div');
-                userMessageDiv.classList.add('user');
-                userMessageDiv.innerText = value;
-                chatMessages.appendChild(userMessageDiv);
-                
-                const assistantMessage = response['message'];
-                
-                const assistantMessageDiv = document.createElement('div');
-                assistantMessageDiv.classList.add('assistant');
-                assistantMessageDiv.innerText = assistantMessage;
-                chatMessages.appendChild(assistantMessageDiv);
-                
-                // TODO: Is there an event I can use for this? 
-                // Is this correct?
-                requestAnimationFrame(() => chatMessages.scrollTo(0, chatMessages.scrollHeight));
-            })
-            .catch(function(error) {
-                alert(error);
-            });
-    });
-    
-    window.addEventListener('load', () => {
-        chatMessages.scrollTo(0, chatMessages.scrollHeight);
-    });
-</script>
-<style>    
-    /* TODO: Consider making the following global */
-    html {
-        height: 100%;
-    }
-    
-    /* TODO: Consider making the following global */
-    body {
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        flex-direction: column;
-    }
-    
-    body > section {
-        flex-grow: 1;
-        display: flex;
-        overflow-y: auto;
-    }
-    
-    body > header {
-        display: flex;
-    }
-    
-    .user,
-    .assistant,
-    .function {
-        display: inline;
-        margin: 1em;
-        padding: 1em;
-        color: white;
-        border-radius: 1em;
-        max-width: 75%;
-        white-space: pre-line;
-    }
-    
-    .assistant {
-        background-color: #c13022;
-    }
-    
-    .function {
-        background-color: #F4D35E;
-    }
-    
-    .user {
-        background-color: #22b3c1;
-        margin-left: 25%;
-    }
-    
-    #chat-messages {
-        overflow: auto;
-    }
-    
-    .activity {
-        background-color: #22b3c1;
-        margin: 1em;
-        padding: 1em;
-        color: white;
-        border-radius: 1em;
-    }
-    
-    .activities ol {
-        overflow-y: auto;
-    }
-    
-    .site-section {
-        overflow-y: auto;
-        justify-content: center;
-    }
-    
-    .create-container {
-        background-color: #22b3c1;
-        color: white;
-        padding: 1em;
-        border-radius: 1em;
-        gap: 0.5em;
-    }
-    
-    .create-container > * {
-        background-color: #5603AD;
-         border-radius: 0.5em;
-    }
-    
-    .create-container ol {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-    }
-    
-    .create-container h2 {
-        font-size: 2rem;
-        margin: 0.2em;
-    }
-</style>
-{% endblock %}
+  const urlParams = new URLSearchParams(window.location.search);
+  const id = urlParams.get("id");
 
+  let chatInput = document.getElementById("chat-input");
+  let chatMessages = document.getElementById("chat-messages");
+
+  chatInput.addEventListener("keydown", function (event) {
+    if (event.keyCode !== 13) {
+      return;
+    }
+
+    const value = chatInput.value;
+    chatInput.value = "";
+
+    api
+      .chat(id, value)
+      .then(function (response) {
+        const userMessageDiv = document.createElement("div");
+        userMessageDiv.classList.add("user");
+        userMessageDiv.innerText = value;
+        chatMessages.appendChild(userMessageDiv);
+
+        const assistantMessage = response["message"];
+
+        const assistantMessageDiv = document.createElement("div");
+        assistantMessageDiv.classList.add("assistant");
+        assistantMessageDiv.innerText = assistantMessage;
+        chatMessages.appendChild(assistantMessageDiv);
+
+        // TODO: Is there an event I can use for this?
+        // Is this correct?
+        requestAnimationFrame(() =>
+          chatMessages.scrollTo(0, chatMessages.scrollHeight)
+        );
+      })
+      .catch(function (error) {
+        alert(error);
+      });
+  });
+
+  window.addEventListener("load", () => {
+    chatMessages.scrollTo(0, chatMessages.scrollHeight);
+  });
+</script>
+<style>
+  /* TODO: Consider making the following global */
+  html {
+    height: 100%;
+  }
+
+  /* TODO: Consider making the following global */
+  body {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+
+  body > section {
+    flex-grow: 1;
+    display: flex;
+    overflow-y: auto;
+  }
+
+  body > header {
+    display: flex;
+  }
+
+  .user,
+  .assistant,
+  .function {
+    display: inline;
+    margin: 1em;
+    padding: 1em;
+    color: white;
+    border-radius: 1em;
+    max-width: 75%;
+    white-space: pre-line;
+  }
+
+  .assistant {
+    background-color: #c13022;
+  }
+
+  .function {
+    background-color: #f4d35e;
+  }
+
+  .user {
+    background-color: #22b3c1;
+    margin-left: 25%;
+  }
+
+  #chat-messages {
+    overflow: auto;
+  }
+
+  .activity {
+    background-color: #22b3c1;
+    margin: 1em;
+    padding: 1em;
+    color: white;
+    border-radius: 1em;
+  }
+
+  .activities ol {
+    overflow-y: auto;
+  }
+
+  .site-section {
+    overflow-y: auto;
+    justify-content: center;
+  }
+
+  .create-container {
+    background-color: #22b3c1;
+    color: white;
+    padding: 1em;
+    border-radius: 1em;
+    gap: 0.5em;
+  }
+
+  .create-container > * {
+    background-color: #5603ad;
+    border-radius: 0.5em;
+  }
+
+  .create-container ol {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+  }
+
+  .create-container h2 {
+    font-size: 2rem;
+    margin: 0.2em;
+  }
+</style>
+{% endblock %} {% block scripts %}
+<script src="{% static 'js/api.js' %}"></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js"
+  integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ=="
+  crossorigin="anonymous"
+  referrerpolicy="no-referrer"
+></script>
+<script src="{% static 'js/navbar.js' %}"></script>
+{% endblock %}

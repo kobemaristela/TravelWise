@@ -1,0 +1,35 @@
+<aside class="sidebar">
+    <div class="toggle">
+      <a href="#" class="burger js-menu-toggle" data-toggle="collapse" data-target="#main-navbar">
+            <span></span>
+          </a>
+    </div>
+    <div class="side-inner">
+      <div class="profile">
+        <!-- Update to be more dynamic -->
+        <img src='https://avataaars.io/?avatarStyle=Circle&topType=LongHairFroBand&accessoriesType=Prescription02&hairColor=SilverGray&facialHairType=BeardMajestic&facialHairColor=Platinum&clotheType=GraphicShirt&clotheColor=PastelBlue&graphicType=Bat&eyeType=Default&eyebrowType=RaisedExcited&mouthType=Sad&skinColor=Pale' class="img-fluid"/>
+        <h3 class="name">{{user.username}}</h3>
+      </div>
+  
+      <div class="counter d-flex justify-content-center">
+          <div class="col">
+            <strong class="number">0</strong>
+            <span class="number-label">Planned</span>
+          </div>
+          <div class="col">
+            <strong class="number">0</strong>
+            <span class="number-label">Completed</span>
+          </div>
+      </div>
+      
+      <div class="nav-menu">
+        <ul>
+          
+          <li {% if request.resolver_match.view_name == "home" %} class="active" {% endif %}><a href="{% url 'home' %}"><span class="fa-sharp fa-solid fa-house"></span> Home</a></li>
+          <li {% if request.resolver_match.view_name == "create-plan" %} class="active" {% endif %}><a href="{% url 'plan' %}" id="create-plan"><span class="fa-solid fa-plus"></span> Create Plan</a></li>
+          <li {% if request.resolver_match.view_name == "history" %} class="active" {% endif %}><a href="{% url 'history' %}"><span class="fa-solid fa-calendar"></span> My Plans</a></li>
+          <li><a href="{% url 'logout' %}"><span class="fa-solid fa-right-from-bracket"></span> Log out</a></li>
+        </ul>
+      </div>
+    </div>
+</aside>
