@@ -19,7 +19,7 @@
                     <div class="author-card-profile">
                         <div class="author-card-avatar"><img src="https://avataaars.io/?avatarStyle=Circle&topType=LongHairFroBand&accessoriesType=Prescription02&hairColor=SilverGray&facialHairType=BeardMajestic&facialHairColor=Platinum&clotheType=GraphicShirt&clotheColor=PastelBlue&graphicType=Bat&eyeType=Default&eyebrowType=RaisedExcited&mouthType=Sad&skinColor=Pale" alt="Daniel Adams"></div>
                         <div class="author-card-details">
-                            <h5 class="author-card-name">{{user.get_full_name}}</h5>
+                            <h5 class="author-card-name">{% if user.get_full_name %}{{user.get_full_name}}{% else %}{{user.username}}{% endif %} </h5>
                             <span class="author-card-position">Joined {{user.date_joined | date:'M Y'}}</span>
                         </div>
                     </div>
