@@ -69,13 +69,11 @@ def login_view(request):
             form.add_error(None, err)
             return render(request, 'accounts/login.html', {"form": form})
 
-
         results = response.json()
-        if not results['success']:
+        if results['success'] == "False":
             form.add_error(None, "Invalid CAPTCHA Token")
             return render(request, 'accounts/login.html', {"form": form})
 
-        print("I'm out")
         if form.is_valid():
             user = authenticate(
                 username=form.cleaned_data['username'],
