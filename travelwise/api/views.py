@@ -3,17 +3,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages as dj_msg
 from django.http import JsonResponse
 from django.contrib.auth.models import User
+from django.conf import settings
 from http import HTTPStatus
-import os
 import openai
 import json
 from .models import Activity, TravelPlan, ChatMessage
 import datetime
 
-OPENAI_KEY = os.environ['OPENAI_KEY']
 OPENAI_MODEL = "gpt-3.5-turbo"
-
-openai.api_key = OPENAI_KEY
+openai.api_key = settings.OPENAI_KEY
 
 OPENAI_FUNCTIONS = [
     {

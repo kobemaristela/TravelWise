@@ -1,10 +1,11 @@
+import requests
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
 from .forms import RegisterForm
-import requests
+from django.conf import settings
 
 
 TravelPlan = apps.get_model('api', 'TravelPlan')
@@ -38,22 +39,27 @@ def register(request):
     return render(request, 'accounts/register.html', {"form": form})
 
 
-def login_view(request):
+async def login_view(request):
     # Authenticated User
     if request.user.is_authenticated:
         return redirect('home')
 
     # Unauthenticated User
     if request.method == 'POST':
-        # CAPTCHA Validation
         form = AuthenticationForm(request, data=request.POST)
         token = request.POST.get('cf-turnstile-response')
 
+        # Missing CAPTCHA Token
         if not token:
-            form.add_error("Missing CAPTCHA", "CAPTCHA Token Missing")
+            form.add_error(None, "CAPTCHA Token Missing")
             return render(request, 'accounts/login.html', {"form": form})
 
+        response = await requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+            'secret': settings.CLOUDFLARE_SECRET_KEY,
+            'response': token
+        }).json()
 
+        print(response)
 
         if form.is_valid():
             user = authenticate(

@@ -27,10 +27,12 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=0))
-
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-
 CSRF_TRUSTED_ORIGINS = os.environ.get("DJANGO_CSRF_TRUSTED_ORIGINS").split(" ")
+
+# Access Keys
+CLOUDFLARE_SECRET_KEY = os.environ.get("CLOUDFLARE_SECRET_KEY")
+OPENAI_KEY = os.environ.get('OPENAI_KEY')
 
 # HTTPS Redirect
 SECURE_SSL_REDIRECT = not DEBUG
