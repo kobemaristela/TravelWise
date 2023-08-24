@@ -50,7 +50,7 @@ def login_view(request):
         token = request.POST.get('cf-turnstile-response')
 
         if not token:
-            form.add_error(None, "CAPTCHA Token Missing.")
+            form.add_error("Missing CAPTCHA", "CAPTCHA Token Missing")
             return render(request, 'accounts/login.html', {"form": form})
 
 
