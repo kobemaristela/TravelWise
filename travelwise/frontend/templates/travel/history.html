@@ -1,0 +1,46 @@
+{% extends 'base.html' %} {% load static %} 
+{% block title %}TravelWise - Plan History{% endblock %}
+
+{% block navbar %}{% include 'components/navbar.html' %}{% endblock %}
+
+{% load crispy_forms_tags %} {% block css %}
+<link rel="stylesheet" href="{% static 'css/navbar.css' %}">
+{% endblock %} {% block content %}
+<main>
+  <div class="site-section d-flex flex-grow-1">
+      <div class="container d-flex flex-column">
+        <!-- In Progress Plans -->
+        <h6 class="bg-light p-2 border-top border-bottom">In Progress</h6>
+        <ul class="list-group list-group-light mb-4">
+          {% for travel_plan in travel_plans %}
+            {% if travel_plan.completed == False %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <a href="/create/?id={{travel_plan.id}}" class="list-group-item list-group-item-action px-3 border-0">
+                Travel Plan {{travel_plan.id}}</a>
+              <a class="btn btn-link btn-rounded btn-sm" href="/api/deletePlan/{{travel_plan.id}}" role="button">Delete</a>
+            </li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+          <!-- Completed Plans -->
+        <h6 class="bg-light p-2 border-top border-bottom">Completed</h6>
+        {% for travel_plan in travel_plans %}
+          {% if travel_plan.completed == True %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <a href="#" class="list-group-item list-group-item-action px-3 border-0">
+                Travel Plan {{travel_plan.id}}</a>
+              <a class="btn btn-link btn-rounded btn-sm" href="/api/deletePlan/{{travel_plan.id}}" role="button">Delete</a>
+            </li>
+        {% endif %}
+      {% endfor %}
+      </div>
+    </div>  
+</main>
+{% endblock %} 
+
+
+{% block scripts %}
+<script src="{% static 'js/api.js' %}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.11.8/umd/popper.min.js" integrity="sha512-TPh2Oxlg1zp+kz3nFA0C5vVC6leG/6mm1z9+mA81MI5eaUVqasPLO8Cuk4gMF4gUfP5etR73rgU/8PNMsSesoQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'js/navbar.js' %}"></script>
+{% endblock %}

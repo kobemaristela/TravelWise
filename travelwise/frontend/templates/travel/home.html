@@ -9,34 +9,7 @@
 <main>
   <div class="site-section d-flex flex-grow-1">
       <div class="container d-flex flex-column">
-        {% block create_plan %}
           <h2>Welcome {{user.username}}</h2>
-          <div class="travel-plans d-flex flex-column flex-grow-1">
-            <h3>Travel Plans</h3>
-            <ul class="flex-grow-1">
-              {% for travel_plan in travel_plans %}
-                <li>
-                  <a href="/create/?id={{travel_plan.id}}">
-                    Travel Plan {{travel_plan.id}}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-            <button id="new-plan-button">New Plan</button>
-          </div>
-          <script>
-            document.getElementById('new-plan-button').addEventListener('click', function(e) {
-              api.createPlan().then(function(response) {
-                const planId = response.planId;
-                    
-                window.location.href = `/create/?id=${planId}`;
-              })
-              .catch(function (error) {
-                alert('Failed to create plan');
-              });
-            });
-          </script>
-        {% endblock %}
       </div>
   </div>  
 </main>
@@ -65,28 +38,6 @@
     
     section {
         flex-grow: 1;
-    }
-    
-    .travel-plans {
-        align-items: center;
-        margin: 1em;
-    }
-    
-    .travel-plans ul {
-        padding: 0;
-        margin: 0;
-    }
-    
-    .travel-plans li {
-        background-color: #22b3c1;
-        border-radius: 1em;
-        padding: 0.5em;
-        margin: 0.5em;
-        list-style-type: none;
-    }
-    
-    .travel-plans li a {
-        color: white;
     }
 </style>
 {% endblock %}
