@@ -57,7 +57,7 @@ def login_view(request):
         response = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
             'secret': settings.CLOUDFLARE_SECRET_KEY,
             'response': token
-        }).json()
+        }, timeout=5, verify=True).json()
 
         print(response)
 
