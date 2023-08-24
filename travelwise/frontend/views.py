@@ -1,8 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
-from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
 from django.apps import apps
 from .forms import RegisterForm
 
@@ -54,12 +53,10 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 return redirect("home")
-        else:
-            messages.error(request, 'Invalid username or password')
+    else:
+        form = AuthenticationForm()
 
-    form = AuthenticationForm()
-
-    return render(request, 'accounts/login.html', {"form": form})
+    return render(request, 'accounts/login.html', {"form": form})   # Catches form errors
 
 
 @login_required(login_url="landing")
@@ -113,5 +110,30 @@ def history_view(request):
         
         
         return render(request, 'travel/history.html', {
-            'travel_plans': travel_plans
-        })
+            'travel_plans': travel_plans})
+
+
+@login_required(login_url="landing")
+def profile_view(request):
+    if request.method == 'POST':
+        request.user.first_name = request.POST.get('first_name')
+        request.user.last_name = request.POST.get('last_name')
+        request.user.save()
+
+        if not request.POST.get('new_password') and not request.POST.get('new_password'):
+            return render(request, 'accounts/profile.html', {'form': {}})
+
+        data = {
+            'new_password1': request.POST.get('new_password'),
+            'new_password2': request.POST.get('confirm_password')
+        }
+
+        form = SetPasswordForm(user=request.user, data=data)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect("profile")
+
+        return render(request, 'accounts/profile.html', {'form': form})  # Returns form error
+
+    return render(request, 'accounts/profile.html')
