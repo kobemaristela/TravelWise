@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
 from .forms import RegisterForm
+import requests
 
 
 TravelPlan = apps.get_model('api', 'TravelPlan')
@@ -44,8 +45,16 @@ def login_view(request):
 
     # Unauthenticated User
     if request.method == 'POST':
+        # CAPTCHA Validation
         form = AuthenticationForm(request, data=request.POST)
-        print(form)
+        token = request.POST.get('cf-turnstile-response')
+
+        if not token:
+            raise form.add_error(None, "CAPTCHA Token Missing.")
+            return render(request, 'accounts/login.html', {"form": form})
+
+
+
         if form.is_valid():
             user = authenticate(
                 username=form.cleaned_data['username'],
