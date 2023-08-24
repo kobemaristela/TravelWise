@@ -58,15 +58,13 @@ def login_view(request):
             'secret': settings.CLOUDFLARE_SECRET_KEY,
             'response': token
         }, timeout=5, verify=True)
-        
-        results = response.json()
 
-        print(results)
-        print(results['success'])
-        if not results.success:   # Checks if there is a response and response is True
-            print("I'm in")
-            form.add_error(None, "Invalid CAPTCHA Token")
-            return render(request, 'accounts/login.html', {"form": form})
+        print(response)
+        # print(response['success'])
+        # if not results.success:   # Checks if there is a response and response is True
+        #     print("I'm in")
+        #     form.add_error(None, "Invalid CAPTCHA Token")
+        #     return render(request, 'accounts/login.html', {"form": form})
 
         print("I'm out")
         if form.is_valid():
