@@ -57,7 +57,7 @@ def login_view(request):
         response = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
             'secret': settings.CLOUDFLARE_SECRET_KEY,
             'response': token
-        }, timeout=5, verify=True).json()
+        }, timeout=10).json()
 
         if not (response and response.success):   # Checks if there is a response and response is True
             form.add_error(None, "Invalid CAPTCHA Token")
