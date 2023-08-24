@@ -39,7 +39,7 @@ def register(request):
     return render(request, 'accounts/register.html', {"form": form})
 
 
-def login_view(request):
+async def login_view(request):
     # Authenticated User
     if request.user.is_authenticated:
         return redirect('home')
@@ -54,7 +54,7 @@ def login_view(request):
             form.add_error(None, "CAPTCHA Token Missing")
             return render(request, 'accounts/login.html', {"form": form})
 
-        response = requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+        response = await requests.post('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
             'secret': settings.CLOUDFLARE_SECRET_KEY,
             'response': token
         }, timeout=5, verify=True).json()
