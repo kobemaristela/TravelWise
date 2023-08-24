@@ -62,6 +62,7 @@ def login_view(request):
         results = response.json()
 
         print(results)
+        print(results.success)
         if not results.success:   # Checks if there is a response and response is True
             print("I'm in")
             form.add_error(None, "Invalid CAPTCHA Token")
