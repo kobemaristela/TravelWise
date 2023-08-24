@@ -45,6 +45,7 @@ def login_view(request):
     # Unauthenticated User
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
+        print(form)
         if form.is_valid():
             user = authenticate(
                 username=form.cleaned_data['username'],
