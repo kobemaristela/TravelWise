@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.contrib import messages
+from django.contrib import messages as dj_msg
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from http import HTTPStatus
@@ -268,6 +268,7 @@ def plan(request):
     
         return redirect(f"/create/?id={new_travel_plan.pk}")
 
+    
 def validateUser(request, username=None):
     if request.method == 'GET':
         if User.objects.filter(username=username).exists():
@@ -282,7 +283,7 @@ def delete_plan(request, plan_id):
         try:
             TravelPlan.objects.get(pk=plan_id, author=request.user).delete()
         except Exception:
-            messages.error(request, "Plan was not deleted" )
+            dj_msg.error(request, "Plan was not deleted" )
 
         return redirect("history")
         
