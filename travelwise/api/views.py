@@ -121,7 +121,14 @@ def chat(request):
     # Prevent OpenAI API calls when testing
     # return JsonResponse({ 'message': 'Test Response' })
     
-    def create_activity(function_arguments):
+    response = {
+        'activities': {
+            'created': None,
+        },
+    }
+    response_activity_created = None
+    
+    def create_activity(function_arguments, response):        
         start_time = function_arguments.get('start_time')
         end_time = function_arguments.get('end_time')
         note = function_arguments.get('note')
@@ -136,9 +143,16 @@ def chat(request):
             plan=travel_plan,
         )
         
+        response['activities']['created'] = {
+            'id': activity.pk,
+            'start_time': activity.start_time,
+            'end_time': activity.end_time,
+            'note': activity.note,
+        }
+        
         return f'Created activity with id \"{activity.pk}\"'
         
-    def delete_activity(function_arguments):
+    def delete_activity(function_arguments, response):
         id = function_arguments.get('id')
         
         id = int(id)
@@ -147,7 +161,7 @@ def chat(request):
         
         return f'Deleted activity with id \"{id}\"'
         
-    def update_activity(function_arguments):
+    def update_activity(function_arguments, response):
         id = function_arguments.get('id')
         start_time = function_arguments.get('start_time')
         end_time = function_arguments.get('end_time')
@@ -217,7 +231,7 @@ def chat(request):
         function = function_table[function_name]
         function_arguments = json.loads(response_message_function_call['arguments'])
         
-        function_response = function(function_arguments)
+        function_response = function(function_arguments, response)
         messages.append(response_message)
         
         function_message = {
@@ -266,12 +280,11 @@ def chat(request):
         'role': 'assistant',
         'content': response_message.content,
     })
+    response['messages'] = response_messages
     
     # StreamingHttpResponse(event_stream(), content_type='text/event-stream')
     
-    return JsonResponse({ 
-        'messages': response_messages,
-    })
+    return JsonResponse(response)
 
 
 @login_required(login_url="landing")

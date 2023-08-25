@@ -47,6 +47,12 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
   
   const activities = JSON.parse(document.getElementById("activitiesJson").textContent);
   
+  function dateFromIsoString(string) {
+    const date = new Date();
+    date.setTime(Date.parse(string));
+    return date;
+  }
+  
   // We definitely should have used some frontend framework.
   function redrawActivities() {
     while (activitiesOl.firstChild) {
@@ -58,14 +64,10 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
         li.classList.add('activity');
         
         const startTimeDiv = document.createElement('div');
-        const startTime = new Date(); 
-        startTime.setTime(Date.parse(activity.start_time));
-        startTimeDiv.innerText = `Start: ${startTime}`;
+        startTimeDiv.innerText = `Start: ${dateFromIsoString(activity.start_time)}`;
         
         const endTimeDiv = document.createElement('div');
-        const endTime = new Date();
-        endTime.setTime(Date.parse(activity.end_time));
-        endTimeDiv.innerText = `End: ${endTime}`;
+        endTimeDiv.innerText = `End: ${dateFromIsoString(activity.end_time)}`;
         
         const noteDiv = document.createElement('div');
         noteDiv.innerText = activity.note;
@@ -103,7 +105,16 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
             
             chatMessages.appendChild(div);
         }
+        
+        if(response.activities.created !== null) {
+            activities.push(response.activities.created);
+            activities.sort((a, b) => {
+                return dateFromIsoString(a.start_time) - dateFromIsoString(b.start_time);
+            });
+        }
 
+
+        // TODO: Add Activities dirty flag
         redrawActivities();
 
         // TODO: Is there an event I can use for this?
