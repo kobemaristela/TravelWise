@@ -4,6 +4,7 @@
 {% load crispy_forms_tags %} {% block css %}
 <link rel="stylesheet" href="{% static 'css/form.css' %}" />
 <link rel="stylesheet" href="{% static 'css/header.css' %}" />
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 {% endblock %} 
 
 {% block header %}{% include 'components/header.html' %}{% endblock %} 
@@ -41,6 +42,9 @@
                     <div class="form-group">
                         <label for="password"><i class="zmdi zmdi-lock"></i></label>
                         <input type="password" name="password" id="password" placeholder="Password"/>
+                    </div>
+                    <div class="checkbox mb-3">
+                        <div class="cf-turnstile" data-sitekey="0x4AAAAAAAJFYiZJzLqxvJrg" data-theme="light"></div>
                     </div>
                     <div class="form-group form-button">
                         <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
