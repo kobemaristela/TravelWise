@@ -241,6 +241,9 @@ def chat(request):
         msg=message, 
         plan=travel_plan
     ).save()
+    
+    response_messages = []
+    
     if function_message is not None:
         ChatMessage(
             time=datetime.datetime.now(), 
@@ -249,15 +252,26 @@ def chat(request):
             function_name=function_message['name'], 
             plan=travel_plan
         ).save()
+        response_messages.append({
+            'role': 'function',
+            'content': function_message['content'],
+        })
     ChatMessage(
         time=datetime.datetime.now(), 
         user='assistant', 
         msg=response_message.content, 
         plan=travel_plan
     ).save()
+    response_messages.append({
+        'role': 'assistant',
+        'content': response_message.content,
+    })
     
     # StreamingHttpResponse(event_stream(), content_type='text/event-stream')
-    return JsonResponse({ 'message': response_message.content })
+    
+    return JsonResponse({ 
+        'messages': response_messages,
+    })
 
 
 @login_required(login_url="landing")
