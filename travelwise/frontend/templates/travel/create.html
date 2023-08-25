@@ -112,7 +112,22 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
                 return dateFromIsoString(a.start_time) - dateFromIsoString(b.start_time);
             });
         }
+        
+        if(response.activities.deleted !== null) {
+            const index = activities.findIndex((a) => a.id === response.activities.deleted);
+            activities.splice(index, 1);
+            
+            // TODO: Is this needed? I don't think so?
+            /*
+            activities.sort((a, b) => {
+                return dateFromIsoString(a.start_time) - dateFromIsoString(b.start_time);
+            });
+            */
+        }
 
+        if(response.activities.modified !== null) {
+            // WIP
+        }
 
         // TODO: Add Activities dirty flag
         redrawActivities();

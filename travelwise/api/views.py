@@ -124,6 +124,7 @@ def chat(request):
     response = {
         'activities': {
             'created': None,
+            'deleted': None,
         },
     }
     response_activity_created = None
@@ -158,6 +159,8 @@ def chat(request):
         id = int(id)
         
         Activity.objects.filter(pk=id, plan=travel_plan).delete()
+        
+        response['activities']['deleted'] = id
         
         return f'Deleted activity with id \"{id}\"'
         
