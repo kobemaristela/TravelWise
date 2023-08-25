@@ -125,6 +125,7 @@ def chat(request):
         'activities': {
             'created': None,
             'deleted': None,
+            'modified': None,
         },
     }
     response_activity_created = None
@@ -186,6 +187,13 @@ def chat(request):
             activity.note = note
             message += f', Note set to {note}'
         activity.save()
+        
+        response['activities']['modified'] = {
+            'id': activity.pk,
+            'start_time': activity.start_time,
+            'end_time': activity.end_time,
+            'note': activity.note,
+        }
         
         return message
         

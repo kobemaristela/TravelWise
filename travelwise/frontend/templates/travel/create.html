@@ -126,7 +126,12 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
         }
 
         if(response.activities.modified !== null) {
-            // WIP
+            const index = activities.findIndex((a) => a.id === response.activities.modified.id);
+            activities[index] = response.activities.modified;
+            
+            activities.sort((a, b) => {
+                return dateFromIsoString(a.start_time) - dateFromIsoString(b.start_time);
+            });
         }
 
         // TODO: Add Activities dirty flag
