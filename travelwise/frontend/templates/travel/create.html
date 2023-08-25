@@ -49,15 +49,23 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
   
   // We definitely should have used some frontend framework.
   function redrawActivities() {
+    while (activitiesOl.firstChild) {
+        activitiesOl.firstChild.remove();
+    }
+  
     for(const activity of activities) {
         const li = document.createElement('div');
         li.classList.add('activity');
         
         const startTimeDiv = document.createElement('div');
-        startTimeDiv.innerText = `Start: ${activity.start_time}`;
+        const startTime = new Date(); 
+        startTime.setTime(Date.parse(activity.start_time));
+        startTimeDiv.innerText = `Start: ${startTime}`;
         
         const endTimeDiv = document.createElement('div');
-        endTimeDiv.innerText = `End: ${activity.end_time}`;
+        const endTime = new Date();
+        endTime.setTime(Date.parse(activity.end_time));
+        endTimeDiv.innerText = `End: ${endTime}`;
         
         const noteDiv = document.createElement('div');
         noteDiv.innerText = activity.note;
