@@ -2,20 +2,13 @@
 Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% endblock %} {% block css %}
 <link rel="stylesheet" href="{% static 'css/navbar.css' %}" />
 {% endblock %} {% load crispy_forms_tags %} {% block content %}
-<main>
-  <div class="site-section d-flex flex-grow-1">
-    <div class="container d-flex flex-column">
+<main class="d-flex">
+  <div class="d-flex flex-grow-1">
+    <div class="d-flex flex-column">
       <div class="create-container d-flex flex-row flex-grow-1 overflow-y-auto">
         <div class="activities container d-flex flex-column flex-grow-1">
           <h2>Activities</h2>
           <ol>
-            {% for activity in activities %}
-            <li class="activity">
-              <div>Start: {{activity.start_time}}</div>
-              <div>End: {{activity.end_time}}</div>
-              <div>{{activity.note}}</div>
-            </li>
-            {% endfor %}
           </ol>
         </div>
         <div class="container d-flex flex-column flex-grow-1">
@@ -42,13 +35,52 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
     </div>
   </div>
 </main>
-
+{{activities|json_script:"activitiesJson"}}
 <script>
   const urlParams = new URLSearchParams(window.location.search);
   const id = urlParams.get("id");
+  
+  const activitiesOl = document.querySelector('.activities ol');
 
-  let chatInput = document.getElementById("chat-input");
-  let chatMessages = document.getElementById("chat-messages");
+  const chatInput = document.getElementById("chat-input");
+  const chatMessages = document.getElementById("chat-messages");
+  
+  const activities = JSON.parse(document.getElementById("activitiesJson").textContent);
+  
+  function dateFromIsoString(string) {
+    const date = new Date();
+    date.setTime(Date.parse(string));
+    return date;
+  }
+  
+  // We definitely should have used some frontend framework.
+  function redrawActivities() {
+    while (activitiesOl.firstChild) {
+        activitiesOl.firstChild.remove();
+    }
+  
+    for(const activity of activities) {
+        const li = document.createElement('div');
+        li.classList.add('activity');
+        
+        const startTimeDiv = document.createElement('div');
+        startTimeDiv.innerText = `Start: ${dateFromIsoString(activity.start_time)}`;
+        
+        const endTimeDiv = document.createElement('div');
+        endTimeDiv.innerText = `End: ${dateFromIsoString(activity.end_time)}`;
+        
+        const noteDiv = document.createElement('div');
+        noteDiv.innerText = activity.note;
+        
+        li.appendChild(startTimeDiv);
+        li.appendChild(endTimeDiv);
+        li.appendChild(noteDiv);
+        
+        activitiesOl.appendChild(li);
+    }
+  }
+  
+  redrawActivities();
 
   chatInput.addEventListener("keydown", function (event) {
     if (event.keyCode !== 13) {
@@ -65,13 +97,45 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
         userMessageDiv.classList.add("user");
         userMessageDiv.innerText = value;
         chatMessages.appendChild(userMessageDiv);
+        
+        for (const message of response.messages) {
+            const div = document.createElement("div");
+            div.classList.add(message.role);
+            div.innerText = message.content;
+            
+            chatMessages.appendChild(div);
+        }
+        
+        if(response.activities.created !== null) {
+            activities.push(response.activities.created);
+            activities.sort((a, b) => {
+                return dateFromIsoString(a.start_time) - dateFromIsoString(b.start_time);
+            });
+        }
+        
+        if(response.activities.deleted !== null) {
+            const index = activities.findIndex((a) => a.id === response.activities.deleted);
+            activities.splice(index, 1);
+            
+            // TODO: Is this needed? I don't think so?
+            /*
+            activities.sort((a, b) => {
+                return dateFromIsoString(a.start_time) - dateFromIsoString(b.start_time);
+            });
+            */
+        }
 
-        const assistantMessage = response["message"];
+        if(response.activities.modified !== null) {
+            const index = activities.findIndex((a) => a.id === response.activities.modified.id);
+            activities[index] = response.activities.modified;
+            
+            activities.sort((a, b) => {
+                return dateFromIsoString(a.start_time) - dateFromIsoString(b.start_time);
+            });
+        }
 
-        const assistantMessageDiv = document.createElement("div");
-        assistantMessageDiv.classList.add("assistant");
-        assistantMessageDiv.innerText = assistantMessage;
-        chatMessages.appendChild(assistantMessageDiv);
+        // TODO: Add Activities dirty flag
+        redrawActivities();
 
         // TODO: Is there an event I can use for this?
         // Is this correct?
@@ -156,6 +220,7 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
   .site-section {
     overflow-y: auto;
     justify-content: center;
+    margin: 0.5em;
   }
 
   .create-container {
@@ -180,6 +245,13 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
   .create-container h2 {
     font-size: 2rem;
     margin: 0.2em;
+  }
+  
+  main {
+    padding-top: 90px;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-bottom: 0.5em;
   }
 </style>
 {% endblock %} {% block scripts %}

@@ -107,8 +107,9 @@ def create_plan(request):
     activities = []
     for stored_activity in Activity.objects.filter(plan=travel_plan).order_by('start_time'):
         activities.append({
-            'start_time': stored_activity.start_time,
-            'end_time': stored_activity.end_time,
+            'id': stored_activity.pk,
+            'start_time': stored_activity.start_time.isoformat(),
+            'end_time': stored_activity.end_time.isoformat(),
             'note': stored_activity.note,
         })
         
