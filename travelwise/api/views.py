@@ -133,8 +133,8 @@ def chat(request):
         end_time = function_arguments.get('end_time')
         note = function_arguments.get('note')
         
-        start_time = timezone.fromisoformat(start_time)
-        end_time = timezone.fromisoformat(end_time)
+        # start_time = timezone.fromisoformat(start_time)
+        # end_time = timezone.fromisoformat(end_time)
         
         activity = Activity.objects.create(
             start_time=start_time,
