@@ -8,7 +8,7 @@ from http import HTTPStatus
 import openai
 import json
 from .models import Activity, TravelPlan, ChatMessage
-from django.utils import timezone
+from django.utils import timezone, dateparse
 
 OPENAI_MODEL = "gpt-3.5-turbo"
 openai.api_key = settings.OPENAI_KEY
@@ -132,6 +132,9 @@ def chat(request):
         start_time = function_arguments.get('start_time')
         end_time = function_arguments.get('end_time')
         note = function_arguments.get('note')
+
+        start_time = dateparse.parse_datetime(start_time)
+        end_time = dateparse.parse_datetime(end_time)
         
         activity = Activity.objects.create(
             start_time=start_time,
