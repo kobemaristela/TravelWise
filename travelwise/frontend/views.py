@@ -1,16 +1,40 @@
 import requests
+import openai
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import AuthenticationForm, SetPasswordForm
 from django.contrib.auth.decorators import login_required
 from django.apps import apps
-from .forms import RegisterForm
 from django.conf import settings
+from .forms import RegisterForm
 
 
 TravelPlan = apps.get_model('api', 'TravelPlan')
 ChatMessage = apps.get_model('api', 'ChatMessage')
 Activity = apps.get_model('api', 'Activity')
+Profile = apps.get_model('frontend', 'Profile')
+
+# Helper Functions
+def create_profile_picture(request):
+    OPENAI_MODEL = "gpt-3.5-turbo"
+    openai.api_key = settings.OPENAI_KEY
+
+    prompt = f'''Generate a LinkedIn headshot for senior professional {request.user.get_full_name()}. 
+            Portray confidence and approachability through his expression, wearing business attire suitable for his industry. 
+            Attain well-lit, focused shot with a clean, professional background. 
+            This is crucial for {request.user.first_name}'s credible online presence.'''
+
+    response = openai.Image.create(
+        prompt=prompt,
+        n=1,
+        size="512x512"
+    )
+    image_url = response['data'][0]['url']
+
+    profile, _ = Profile.objects.get_or_create(user=request.user)
+    profile.profile_picture = image_url
+    profile.save()
+
 
 def landing(request):
     return render(request, "index.html")
@@ -146,9 +170,12 @@ def history_view(request):
 @login_required(login_url="landing")
 def profile_view(request):
     if request.method == 'POST':
-        request.user.first_name = request.POST.get('first_name')
-        request.user.last_name = request.POST.get('last_name')
-        request.user.save()
+        if request.POST.get('first_name') != request.user.first_name or request.user.last_name != request.POST.get('last_name'):
+            request.user.first_name = request.POST.get('first_name')
+            request.user.last_name = request.POST.get('last_name')
+            request.user.save()
+
+            create_profile_picture(request)
 
         if not request.POST.get('new_password') and not request.POST.get('new_password'):
             return render(request, 'accounts/profile.html', {'form': {}})
