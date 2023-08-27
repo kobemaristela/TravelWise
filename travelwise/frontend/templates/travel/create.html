@@ -13,10 +13,7 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
         </div>
         <div class="container d-flex flex-column flex-grow-1">
           <div id="chat-messages" class="flex-grow-1 d-flex flex-column">
-            <div class="assistant">
-              Hello, I am your travel planning assistant. Where would you like
-              to travel?
-            </div>
+            <div class="assistant">Hello, I am your travel planning assistant. Where would you like to travel?</div>
 
             {% for message in messages %}
             <div class="{{message.role}}">{{message.content}}</div>
