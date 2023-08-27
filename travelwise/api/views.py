@@ -4,6 +4,7 @@ from django.contrib import messages as dj_msg
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import timezone
 from http import HTTPStatus
 import openai
 import json
@@ -198,7 +199,7 @@ def chat(request):
     messages = [
         { 
             'role': 'system', 
-            'content': f'You are an assistant for organizing travel plans. The current date is {datetime.datetime.now(datetime.timezone.utc)}',
+            'content': f'You are an assistant for organizing travel plans. The current date is {timezone.now()}',
         },
     ]
     
