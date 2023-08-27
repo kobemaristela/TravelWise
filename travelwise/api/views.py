@@ -4,11 +4,12 @@ from django.contrib import messages as dj_msg
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import timezone, dateparse
 from http import HTTPStatus
 import openai
 import json
 from .models import Activity, TravelPlan, ChatMessage
-from django.utils import timezone, dateparse
+
 
 OPENAI_MODEL = "gpt-3.5-turbo"
 openai.api_key = settings.OPENAI_KEY
@@ -198,7 +199,7 @@ def chat(request):
     messages = [
         { 
             'role': 'system', 
-            'content': 'You are an assistant for organizing travel plans.',
+            'content': f'You are an assistant for organizing travel plans. The current date is {timezone.now()}',
         },
     ]
     
