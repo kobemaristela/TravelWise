@@ -24,8 +24,6 @@
       
       <div class="nav-menu">
         <ul>
-          
-          <li {% if request.resolver_match.view_name == "home" %} class="active" {% endif %}><a href="{% url 'home' %}"><span class="fa-sharp fa-solid fa-house"></span> Home</a></li>
           <li {% if request.resolver_match.view_name == "create-plan" %} class="active" {% endif %}><a href="{% url 'plan' %}" id="create-plan"><span class="fa-solid fa-plus"></span> Create Plan</a></li>
           <li {% if request.resolver_match.view_name == "history" %} class="active" {% endif %}><a href="{% url 'history' %}"><span class="fa-solid fa-calendar"></span> My Plans</a></li>
           <li {% if request.resolver_match.view_name == "profile" %} class="active" {% endif %}><a href="{% url 'profile' %}"><span class="fa-solid fa-gear"></span> Settings</a></li>
