@@ -298,11 +298,26 @@ def chat(request):
 
 @login_required(login_url="landing")
 def plan(request):
-    if request.method == 'GET':
-        new_travel_plan = TravelPlan(name='WIP', author=request.user, note='WIP')
-        new_travel_plan.save()
+    # Probably should be POST
+    if request.method != 'GET':
+        # TODO: Redirect home?
+        # How to handle errors in general?
+        return redirect("history")
+        
+    name = request.GET.get('name')
+    note = request.GET.get('note')
     
-        return redirect(f"/create/?id={new_travel_plan.pk}")
+    if name is None or note is None:
+        return redirect("history")
+        
+    new_travel_plan = TravelPlan(
+        name=name, 
+        author=request.user, 
+        note=note
+    )
+    new_travel_plan.save()
+    
+    return redirect(f"/create/?id={new_travel_plan.pk}")
 
     
 def validateUser(request, username=None):
