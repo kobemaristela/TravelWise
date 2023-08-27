@@ -198,7 +198,7 @@ def chat(request):
     messages = [
         { 
             'role': 'system', 
-            'content': 'You are an assistant for organizing travel plans.',
+            'content': f'You are an assistant for organizing travel plans. The current date is {datetime.datetime.now(datetime.timezone.utc)}',
         },
     ]
     
