@@ -47,15 +47,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form action="{% url 'plan' %}" method="POST">
+          {% csrf_token %}
           <div class="form-group">
-            <label for="title-field" class="col-form-label">Title:</label>
-            <input type="text" class="form-control" id="title-field" required>
+            <label for="name-field" class="col-form-label">Name:</label>
+            <input type="text" class="form-control" id="name-field" name="name" required>
           </div>
           <div class="col-12">
             <div class="form-group">
               <label for="note-field" class="col-form-label">Note:</label>
-              <textarea class="form-control" id="note-field" required></textarea>
+              <textarea class="form-control" id="note-field" name="note" required></textarea>
             </div>
           </div>
           <div class="col-12 p-2">

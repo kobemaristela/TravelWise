@@ -9,6 +9,7 @@ import openai
 import json
 from .models import Activity, TravelPlan, ChatMessage
 import datetime
+from django import forms
 
 OPENAI_MODEL = "gpt-3.5-turbo"
 openai.api_key = settings.OPENAI_KEY
@@ -295,21 +296,25 @@ def chat(request):
     
     return JsonResponse(response)
 
+class CreatePlanForm(forms.Form):
+    name = forms.CharField(label="Name", max_length=100)
+    note = forms.CharField(label="Note", max_length=256)
 
 @login_required(login_url="landing")
 def plan(request):
-    # Probably should be POST
-    if request.method != 'GET':
+    if request.method != 'POST':
         # TODO: Redirect home?
         # How to handle errors in general?
         return redirect("history")
         
-    name = request.GET.get('name')
-    note = request.GET.get('note')
+    form = CreatePlanForm(request.POST)
     
-    if name is None or note is None:
+    if not form.is_valid():
         return redirect("history")
         
+    name = form.cleaned_data['name']
+    note = form.cleaned_data['note']
+
     new_travel_plan = TravelPlan(
         name=name, 
         author=request.user, 
