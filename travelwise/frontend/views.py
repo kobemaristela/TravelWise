@@ -42,12 +42,7 @@ def landing(request):
 
 @login_required(login_url="landing")
 def home(request):
-    try:
-        recent_plan = TravelPlan.objects.filter(author=request.user).latest('last_modified')
-    except TravelPlan.DoesNotExist:
-        return redirect("plan")
-
-    return redirect(f"/create/?id={recent_plan.pk}")
+    return render(request, 'travel/home.html')
 
 
 def register(request):
