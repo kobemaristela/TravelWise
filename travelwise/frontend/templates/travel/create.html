@@ -71,10 +71,15 @@ Plan{% endblock %} {% block navbar %}{% include 'components/navbar.html' %}{% en
         
         const noteDiv = document.createElement('div');
         noteDiv.innerText = activity.note;
+
+        const activityImg = document.createElement('img');
+        activityImg.src = activity.link;
+        
         
         li.appendChild(startTimeDiv);
         li.appendChild(endTimeDiv);
         li.appendChild(noteDiv);
+        li.appendChild(activityImg);
         
         activitiesOl.appendChild(li);
     }

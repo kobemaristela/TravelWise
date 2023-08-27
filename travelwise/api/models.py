@@ -20,8 +20,8 @@ class TravelPlan(models.Model):
 class Activity(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
-    link = models.TextField()
-    note = models.TextField()
+    link = models.URLField(null=True)
+    note = models.TextField(null=True)
     plan = models.ForeignKey(TravelPlan, on_delete=models.CASCADE)
 
 
