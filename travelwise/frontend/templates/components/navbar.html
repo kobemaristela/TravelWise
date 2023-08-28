@@ -24,9 +24,11 @@
       
       <div class="nav-menu">
         <ul>
-          
-          <li {% if request.resolver_match.view_name == "home" %} class="active" {% endif %}><a href="{% url 'home' %}"><span class="fa-sharp fa-solid fa-house"></span> Home</a></li>
-          <li {% if request.resolver_match.view_name == "create-plan" %} class="active" {% endif %}><a href="{% url 'plan' %}" id="create-plan"><span class="fa-solid fa-plus"></span> Create Plan</a></li>
+          <li {% if request.resolver_match.view_name == "create-plan" %} class="active" {% endif %}>
+            <a href="#createPlanModal" data-bs-toggle="modal" id="create-plan">
+              <span class="fa-solid fa-plus"></span> Create Plan
+            </a>
+          </li>
           <li {% if request.resolver_match.view_name == "history" %} class="active" {% endif %}><a href="{% url 'history' %}"><span class="fa-solid fa-calendar"></span> My Plans</a></li>
           <li {% if request.resolver_match.view_name == "profile" %} class="active" {% endif %}><a href="{% url 'profile' %}"><span class="fa-solid fa-gear"></span> Settings</a></li>
           <li><a href="{% url 'logout' %}"><span class="fa-solid fa-right-from-bracket"></span> Log out</a></li>
@@ -34,3 +36,32 @@
       </div>
     </div>
 </aside>
+
+<div class="modal fade" id="createPlanModal" tabindex="-1" aria-labelledby="createPlanModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createPlanModalLabel">Create Plan</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cancel"></button>
+      </div>
+      <div class="modal-body">
+        <form action="{% url 'plan' %}" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="name-field" class="col-form-label">Name:</label>
+            <input type="text" class="form-control" id="name-field" name="name" required>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <label for="note-field" class="col-form-label">Note:</label>
+              <textarea class="form-control" id="note-field" name="note" required></textarea>
+            </div>
+          </div>
+          <div class="col-12 p-2">
+            <button type="submit" class="btn btn-primary">Create</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

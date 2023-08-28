@@ -15,25 +15,54 @@
     
     window.api = {};
     
-    window.api.chat = function(planId, message) {
-        const csrftoken = getCookie('csrftoken');
+    window.api.getCsrfToken = function() {
+        const csrfToken = getCookie('csrftoken');
         
-        if(csrftoken === null) {
-            throw new Error('Missing cookies with name "csrftoken"');
+        if(csrfToken === null) {
+            throw new Error('Missing cookie with name "csrftoken"');
         }
         
-        return fetch('/api/chat/', {
+        return csrfToken;
+    };
+    
+    window.api.chat = async function(planId, message) {
+        const response = await fetch('/api/chat/', {
             method: 'POST',
             headers: {
-                'X-CSRFToken': csrftoken,
+                'X-CSRFToken': this.getCsrfToken(),
                 'Content-Type': 'application/json; charset=utf-8',
             },
             body: JSON.stringify({
                 'planId': Number(planId),
                 'message': message,
             }),
-        }).then(function (response) {
-            return response.json();
         });
+        
+        const json = await response.json();
+        
+        if(!response.ok) {
+            // TODO: Make Error
+            throw json;
+        }
+        
+        return json;
+    };
+    
+    window.api.updatePlanActivity = async function(planId, activityId, patch) {
+        const response = await fetch(`/api/plan/${planId}/activity/${activityId}`, {
+            method: 'PATCH',
+            headers: {
+                'X-CSRFToken': this.getCsrfToken(),
+                'Content-Type': 'application/json; charset=utf-8',
+            },
+            body: JSON.stringify(patch),
+        });
+        
+        const json = await response.json();
+        if(!response.ok) {
+            // TODO: Make Error
+            throw json;
+        }
+        return json;
     };
 })();

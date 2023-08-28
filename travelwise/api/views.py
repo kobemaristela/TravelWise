@@ -4,11 +4,13 @@ from django.contrib import messages as dj_msg
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import timezone, dateparse
+from django import forms
 from http import HTTPStatus
 import openai
 import json
 from .models import Activity, TravelPlan, ChatMessage
-import datetime
+from .forms import CreatePlanForm
 
 OPENAI_MODEL = "gpt-3.5-turbo"
 openai.api_key = settings.OPENAI_KEY
@@ -150,8 +152,8 @@ def chat(request):
         note = function_arguments.get('note')
         activity_img = create_image(note) if note is not None else None
 
-        start_time = datetime.datetime.fromisoformat(start_time)
-        end_time = datetime.datetime.fromisoformat(end_time)
+        start_time = dateparse.parse_datetime(start_time)
+        end_time = dateparse.parse_datetime(end_time)
         
         activity = Activity.objects.create(
             start_time=start_time,
@@ -220,7 +222,7 @@ def chat(request):
     messages = [
         { 
             'role': 'system', 
-            'content': 'You are an assistant for organizing travel plans.',
+            'content': f'You are an assistant for organizing travel plans. The current date is {timezone.now()}',
         },
     ]
     
@@ -281,7 +283,7 @@ def chat(request):
         response_message = chat_completion.choices[0].message
         
     ChatMessage(
-        time=datetime.datetime.now(), 
+        time=timezone.now(), 
         user='user', 
         msg=message, 
         plan=travel_plan
@@ -291,7 +293,7 @@ def chat(request):
     
     if function_message is not None:
         ChatMessage(
-            time=datetime.datetime.now(), 
+            time=timezone.now(), 
             user='function', 
             msg=function_message['content'], 
             function_name=function_message['name'], 
@@ -302,7 +304,7 @@ def chat(request):
             'content': function_message['content'],
         })
     ChatMessage(
-        time=datetime.datetime.now(), 
+        time=timezone.now(), 
         user='assistant', 
         msg=response_message.content, 
         plan=travel_plan
@@ -317,14 +319,29 @@ def chat(request):
     
     return JsonResponse(response)
 
-
 @login_required(login_url="landing")
 def plan(request):
-    if request.method == 'GET':
-        new_travel_plan = TravelPlan(name='WIP', author=request.user, note='WIP')
-        new_travel_plan.save()
+    if request.method != 'POST':
+        # TODO: Redirect home?
+        # How to handle errors in general?
+        return redirect("history")
+        
+    form = CreatePlanForm(request.POST)
     
-        return redirect(f"/create/?id={new_travel_plan.pk}")
+    if not form.is_valid():
+        return redirect("history")
+        
+    name = form.cleaned_data['name']
+    note = form.cleaned_data['note']
+
+    new_travel_plan = TravelPlan(
+        name=name, 
+        author=request.user, 
+        note=note
+    )
+    new_travel_plan.save()
+    
+    return redirect(f"/create/?id={new_travel_plan.pk}")
 
     
 def validateUser(request, username=None):
@@ -344,4 +361,52 @@ def delete_plan(request, plan_id):
             dj_msg.error(request, "Plan was not deleted" )
 
         return redirect("history")
+
         
+@login_required(login_url="landing")
+def update_plan_activity(request, plan_id, activity_id):
+    if request.method != 'PATCH':
+        return JsonResponse({ 'error': 'Invalid Method' }, status=HTTPStatus.METHOD_NOT_ALLOWED)
+        
+    if not request.user.is_authenticated:
+        return JsonResponse({ 'error': 'Unauthorized' }, status=HTTPStatus.UNAUTHORIZED)
+        
+    request_body = None
+    try:
+        request_body = request.body.decode('utf-8')
+    except:
+        return JsonResponse({ 'error': 'Request body is not UTF-8' }, status=HTTPStatus.BAD_REQUEST)
+        
+    request_json = None
+    try:  
+        request_json = json.loads(request_body)
+    except:
+        return JsonResponse({ 'error': 'Request body is not JSON' }, status=HTTPStatus.BAD_REQUEST)
+     
+     
+    travel_plan = TravelPlan.objects.filter(pk=plan_id, author=request.user).first()
+    if travel_plan is None:
+        return JsonResponse({ 'error': 'Missing travel plan' }, status=HTTPStatus.NOT_FOUND)
+        
+    activity = Activity.objects.filter(pk=activity_id, plan=travel_plan).first()
+    if activity is None:
+        return JsonResponse({ 'error': 'Missing Activity' }, status=HTTPStatus.NOT_FOUND)
+        
+    update_message = f'Updated activity with id \"{activity_id}\"'
+        
+    if 'note' in request_json:
+        note = request_json['note']
+        activity.note = note
+        update_message += f', Note set to {note}'
+    
+    # TODO: This should be a transaction
+    activity.save()
+    ChatMessage(
+        time=timezone.now(), 
+        user='function', 
+        msg=update_message, 
+        function_name='update_activity', 
+        plan=travel_plan
+    ).save()
+    
+    return JsonResponse({'message': update_message}, status=HTTPStatus.OK)
