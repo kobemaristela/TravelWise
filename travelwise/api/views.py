@@ -10,6 +10,7 @@ from http import HTTPStatus
 import openai
 import json
 from .models import Activity, TravelPlan, ChatMessage
+from .forms import CreatePlanForm
 
 OPENAI_MODEL = "gpt-3.5-turbo"
 openai.api_key = settings.OPENAI_KEY
@@ -295,10 +296,6 @@ def chat(request):
     # StreamingHttpResponse(event_stream(), content_type='text/event-stream')
     
     return JsonResponse(response)
-
-class CreatePlanForm(forms.Form):
-    name = forms.CharField(label="Name", max_length=100)
-    note = forms.CharField(label="Note", max_length=256)
 
 @login_required(login_url="landing")
 def plan(request):
