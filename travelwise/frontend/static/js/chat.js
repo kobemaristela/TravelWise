@@ -32,6 +32,29 @@ function redrawActivities() {
 
         const noteDiv = document.createElement('div');
         noteDiv.innerText = activity.note;
+        noteDiv.contentEditable = 'true';
+        noteDiv.addEventListener('keydown', function(event) {
+            if(event.keyCode !== 13) {
+                return;
+            }
+            event.preventDefault();
+            
+            api.updatePlanActivity(id, activity.id, {
+                note: event.target.innerText,
+            })
+            .then((response) => {
+                const div = document.createElement("div");
+                div.classList.add('function');
+                div.innerText = response['message'];
+
+                chatMessages.appendChild(div);
+                
+                requestAnimationFrame(() => chatMessages.scrollTo(0, chatMessages.scrollHeight));
+            })
+            .catch((error) => {
+                alert(error);
+            });
+        });
 
         li.appendChild(startTimeDiv);
         li.appendChild(endTimeDiv);
