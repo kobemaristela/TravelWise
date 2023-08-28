@@ -5,11 +5,12 @@ from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.conf import settings
 from django.utils import timezone, dateparse
+from django import forms
 from http import HTTPStatus
 import openai
 import json
 from .models import Activity, TravelPlan, ChatMessage
-
+from .forms import CreatePlanForm
 
 OPENAI_MODEL = "gpt-3.5-turbo"
 openai.api_key = settings.OPENAI_KEY
@@ -296,14 +297,29 @@ def chat(request):
     
     return JsonResponse(response)
 
-
 @login_required(login_url="landing")
 def plan(request):
-    if request.method == 'GET':
-        new_travel_plan = TravelPlan(name='WIP', author=request.user, note='WIP')
-        new_travel_plan.save()
+    if request.method != 'POST':
+        # TODO: Redirect home?
+        # How to handle errors in general?
+        return redirect("history")
+        
+    form = CreatePlanForm(request.POST)
     
-        return redirect(f"/create/?id={new_travel_plan.pk}")
+    if not form.is_valid():
+        return redirect("history")
+        
+    name = form.cleaned_data['name']
+    note = form.cleaned_data['note']
+
+    new_travel_plan = TravelPlan(
+        name=name, 
+        author=request.user, 
+        note=note
+    )
+    new_travel_plan.save()
+    
+    return redirect(f"/create/?id={new_travel_plan.pk}")
 
     
 def validateUser(request, username=None):
