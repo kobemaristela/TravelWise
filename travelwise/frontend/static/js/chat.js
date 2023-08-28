@@ -56,9 +56,13 @@ function redrawActivities() {
             });
         });
 
+        const activityImg = document.createElement('img');
+        activityImg.src = activity.link;
+
         li.appendChild(startTimeDiv);
         li.appendChild(endTimeDiv);
         li.appendChild(noteDiv);
+        li.appendChild(activityImg);
 
         activitiesOl.appendChild(li);
     }

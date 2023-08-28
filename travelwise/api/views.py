@@ -87,6 +87,22 @@ OPENAI_FUNCTIONS = [
     },
 ]
 
+# Helper Function
+def create_image(activity):
+    prompt = f'''Generate an enticing image depicting a captivating travel activity: {activity}. 
+                Craft an image that showcases the thrill and beauty of the experience, capturing the essence of the destination and the activity's excitement. 
+                Ensure the image is vibrant, immersive, and alluring, inspiring travelers to explore and engage in this remarkable adventure.'''
+
+    response = openai.Image.create(
+        prompt=prompt,
+        n=1,
+        size="512x512"
+    )
+    image_url = response['data'][0]['url']
+
+    return image_url
+
+
 def chat(request):
     if request.method != 'POST':
         return JsonResponse({ 'error': 'Invalid Method' }, status=HTTPStatus.METHOD_NOT_ALLOWED)
@@ -134,6 +150,7 @@ def chat(request):
         start_time = function_arguments.get('start_time')
         end_time = function_arguments.get('end_time')
         note = function_arguments.get('note')
+        activity_img = create_image(note) if note is not None else None
 
         start_time = dateparse.parse_datetime(start_time)
         end_time = dateparse.parse_datetime(end_time)
@@ -142,6 +159,7 @@ def chat(request):
             start_time=start_time,
             end_time=end_time,
             note=note,
+            link=activity_img,
             plan=travel_plan,
         )
         
@@ -150,6 +168,7 @@ def chat(request):
             'start_time': activity.start_time,
             'end_time': activity.end_time,
             'note': activity.note,
+            'link': activity.link,
         }
         
         return f'Created activity with id \"{activity.pk}\"'
@@ -186,6 +205,8 @@ def chat(request):
         if note is not None:
             activity.note = note
             message += f', Note set to {note}'
+            activity.link = create_image(note)   # Update Image
+
         activity.save()
         
         response['activities']['modified'] = {
@@ -193,6 +214,7 @@ def chat(request):
             'start_time': activity.start_time,
             'end_time': activity.end_time,
             'note': activity.note,
+            'link': activity.link,
         }
         
         return message
@@ -339,6 +361,7 @@ def delete_plan(request, plan_id):
             dj_msg.error(request, "Plan was not deleted" )
 
         return redirect("history")
+
         
 @login_required(login_url="landing")
 def update_plan_activity(request, plan_id, activity_id):
