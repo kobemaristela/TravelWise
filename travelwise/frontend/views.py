@@ -140,6 +140,7 @@ def create_plan(request):
             'start_time': stored_activity.start_time.isoformat(),
             'end_time': stored_activity.end_time.isoformat(),
             'note': stored_activity.note,
+            'link': stored_activity.link,
         })
         
     messages = []
