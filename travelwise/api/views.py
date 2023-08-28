@@ -370,4 +370,4 @@ def update_plan_activity(request, plan_id, activity_id):
         plan=travel_plan
     ).save()
     
-    return JsonResponse({'message': 'ok'}, status=HTTPStatus.OK)
+    return JsonResponse({'message': update_message}, status=HTTPStatus.OK)

@@ -48,7 +48,7 @@
         return json;
     };
     
-    window.api.updatePlanActivity = async function(planId, activityId, patch = {}) {
+    window.api.updatePlanActivity = async function(planId, activityId, patch) {
         const response = await fetch(`/api/plan/${planId}/activity/${activityId}`, {
             method: 'PATCH',
             headers: {
