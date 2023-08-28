@@ -324,3 +324,50 @@ def delete_plan(request, plan_id):
 
         return redirect("history")
         
+@login_required(login_url="landing")
+def update_plan_activity(request, plan_id, activity_id):
+    if request.method != 'PATCH':
+        return JsonResponse({ 'error': 'Invalid Method' }, status=HTTPStatus.METHOD_NOT_ALLOWED)
+        
+    if not request.user.is_authenticated:
+        return JsonResponse({ 'error': 'Unauthorized' }, status=HTTPStatus.UNAUTHORIZED)
+        
+    request_body = None
+    try:
+        request_body = request.body.decode('utf-8')
+    except:
+        return JsonResponse({ 'error': 'Request body is not UTF-8' }, status=HTTPStatus.BAD_REQUEST)
+        
+    request_json = None
+    try:  
+        request_json = json.loads(request_body)
+    except:
+        return JsonResponse({ 'error': 'Request body is not JSON' }, status=HTTPStatus.BAD_REQUEST)
+     
+     
+    travel_plan = TravelPlan.objects.filter(pk=plan_id, author=request.user).first()
+    if travel_plan is None:
+        return JsonResponse({ 'error': 'Missing travel plan' }, status=HTTPStatus.NOT_FOUND)
+        
+    activity = Activity.objects.filter(pk=activity_id, plan=travel_plan).first()
+    if activity is None:
+        return JsonResponse({ 'error': 'Missing Activity' }, status=HTTPStatus.NOT_FOUND)
+        
+    update_message = f'Updated activity with id \"{activity_id}\"'
+        
+    if 'note' in request_json:
+        note = request_json['note']
+        activity.note = note
+        update_message += f', Note set to {note}'
+    
+    # TODO: This should be a transaction
+    activity.save()
+    ChatMessage(
+        time=timezone.now(), 
+        user='function', 
+        msg=update_message, 
+        function_name='update_activity', 
+        plan=travel_plan
+    ).save()
+    
+    return JsonResponse({'message': 'ok'}, status=HTTPStatus.OK)
