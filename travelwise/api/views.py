@@ -4,12 +4,12 @@ from django.contrib import messages as dj_msg
 from django.http import JsonResponse
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.utils import timezone, dateparse
+from django import forms
 from http import HTTPStatus
 import openai
 import json
 from .models import Activity, TravelPlan, ChatMessage
-import datetime
-from django import forms
 
 OPENAI_MODEL = "gpt-3.5-turbo"
 openai.api_key = settings.OPENAI_KEY
@@ -133,9 +133,9 @@ def chat(request):
         start_time = function_arguments.get('start_time')
         end_time = function_arguments.get('end_time')
         note = function_arguments.get('note')
-        
-        start_time = datetime.datetime.fromisoformat(start_time)
-        end_time = datetime.datetime.fromisoformat(end_time)
+
+        start_time = dateparse.parse_datetime(start_time)
+        end_time = dateparse.parse_datetime(end_time)
         
         activity = Activity.objects.create(
             start_time=start_time,
@@ -199,7 +199,7 @@ def chat(request):
     messages = [
         { 
             'role': 'system', 
-            'content': 'You are an assistant for organizing travel plans.',
+            'content': f'You are an assistant for organizing travel plans. The current date is {timezone.now()}',
         },
     ]
     
@@ -260,7 +260,7 @@ def chat(request):
         response_message = chat_completion.choices[0].message
         
     ChatMessage(
-        time=datetime.datetime.now(), 
+        time=timezone.now(), 
         user='user', 
         msg=message, 
         plan=travel_plan
@@ -270,7 +270,7 @@ def chat(request):
     
     if function_message is not None:
         ChatMessage(
-            time=datetime.datetime.now(), 
+            time=timezone.now(), 
             user='function', 
             msg=function_message['content'], 
             function_name=function_message['name'], 
@@ -281,7 +281,7 @@ def chat(request):
             'content': function_message['content'],
         })
     ChatMessage(
-        time=datetime.datetime.now(), 
+        time=timezone.now(), 
         user='assistant', 
         msg=response_message.content, 
         plan=travel_plan

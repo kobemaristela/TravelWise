@@ -24,8 +24,6 @@
       
       <div class="nav-menu">
         <ul>
-          
-          <li {% if request.resolver_match.view_name == "home" %} class="active" {% endif %}><a href="{% url 'home' %}"><span class="fa-sharp fa-solid fa-house"></span> Home</a></li>
           <li {% if request.resolver_match.view_name == "create-plan" %} class="active" {% endif %}>
             <a href="#createPlanModal" data-bs-toggle="modal" id="create-plan">
               <span class="fa-solid fa-plus"></span> Create Plan
